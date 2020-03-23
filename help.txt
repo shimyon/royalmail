@@ -1,0 +1,19 @@
+option.php
+sliced-invoices.php
+sliced-admin-metaboxes.php
+sliced-tags-general.php
+class-sliced-admin.php
+
+class-sliced-activator.php
+option.php
+
+==> 
+wp-content\themes\twentrytwenty\sliced\
+sliced-invoice-display.php
+
+wp-content\plugins\sliced-invoices\includes\template-tags
+
+sliced-tags-display-modules.php
+
+==> Add new master here
+sliced-admin-options.php
