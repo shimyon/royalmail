@@ -1,0 +1,64 @@
+/*------- Font Family Starts -------*/
+
+@font-face { font-family: "NotoSans-Light"; src: url("../fonts/NotoSans-Light.ttf"); }
+@font-face { font-family: "NotoSans-Regular"; src: url("../fonts/NotoSans-Regular.ttf"); }
+@font-face { font-family: "NotoSans-Medium"; src: url("../fonts/NotoSans-Medium.ttf"); }
+@font-face { font-family: "NotoSans-SemiBold"; src: url("../fonts/NotoSans-SemiBold.ttf"); }
+@font-face { font-family: "NotoSans-Bold"; src: url("../fonts/NotoSans-Bold.ttf"); }
+@font-face { font-family: "NotoSans-Black"; src: url("../fonts/NotoSans-Black.ttf"); }
+
+/*------- Font Family Ends -------*/
+
+/*------- Reset CSS Starts -------*/
+
+html { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+ul,
+h1,
+h2,
+h3,
+h4,
+p { margin: 0; padding: 0; }
+li { list-style: none; }
+a,
+a:hover,
+a:focus { text-decoration: none; transition: 0.5s linear; -webkit-transition: 0.5s linear; -moz-transition: 0.5s linear; -ms-transition: 0.5s linear; -o-transition: 0.5s linear; }
+
+/*------- Reset CSS Ends -------*/
+
+/*------- Common CSS Starts -------*/
+
+.img-auto { margin: 0 auto; }
+.flex-align-center { -ms-align-items: center; align-items: center; display: -webkit-flex; display: -moz-flex; display: -ms-flex; display: -o-flex; display: flex; }
+
+/*------- Common CSS Ends -------*/
+.no-padding{padding: 0;}
+.ptb10{padding-top:10px; padding-bottom: 10px;}
+
+.br-black{border: solid 2px #000;}
+.bg-black{background-color: #000; padding-top:5px; padding-bottom: 5px; color: #FFCC28;border:0;}
+.bg-yellow{background-color: #FFCC28; padding-top:5px; padding-bottom: 5px; color: #000;border:0;}
+h4.inline{display: inline-block;}
+.address{display: inline-block;}
+.bg-black h3{color: #FFCC28; text-transform: uppercase; font-weight: 600;}
+.table th{text-align: center;}
+.table td{border-top:none!important;}
+.table li{list-style: unset;margin-left: 20px;}
+.table strong{margin-top: 15px; display: block;}
+.table{margin-bottom: 0;}
+/*.br-around td{border: solid 1px #000; white-space: nowrap;}*/
+.br-top{border-top:solid 2px #000;}
+.yellow-txt{color:#FFCC28;}
+
+.ptb30{padding-top:30px; padding-bottom: 30px;}
+
+.table > tbody > tr > .no-line {
+    border-top: none;
+}
+
+.table > thead > tr > .no-line {
+    border-bottom: none;
+}
+
+.table > tbody > tr > .thick-line {
+    border-top: 2px solid;
+}
