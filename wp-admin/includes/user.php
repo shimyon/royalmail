@@ -105,6 +105,10 @@ function edit_user( $user_id = 0 ) {
 	if ( isset( $_POST['description'] ) ) {
 		$user->description = trim( $_POST['description'] );
 	}
+	
+	if ( isset( $_POST['signature_value'] ) ) {
+		$user->signature_value = trim( $_POST['signature_value'] );
+	}
 
 	foreach ( wp_get_user_contact_methods( $user ) as $method => $name ) {
 		if ( isset( $_POST[ $method ] ) ) {

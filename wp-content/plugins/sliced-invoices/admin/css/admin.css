@@ -282,6 +282,12 @@ body.post-type-sliced_quote > .select2-container--open {
 .sliced #side-sortables .cmb-row .cmb2-metabox-description, .inner-sidebar .cmb-row .cmb2-metabox-description {
   padding-bottom: 0;
 }
+
+[class*='additional-option']
+{
+  min-width: 200px; 
+}
+
 .sliced .button-small {
   font-weight: normal;
 }

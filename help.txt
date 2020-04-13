@@ -1,14 +1,21 @@
+https://acc.petraarmoredvehicles.com/wp-admin/post-new.php?post_type=sliced_invoice
+
+==> Invoice page
+sliced-admin-metaboxes.php
+
+
 option.php
 sliced-invoices.php
-sliced-admin-metaboxes.php
+
+
 sliced-tags-general.php
 class-sliced-admin.php
 
 class-sliced-activator.php
 option.php
-
+  
 ==> 
-wp-content\themes\twentrytwenty\sliced\
+wp-content\themes\twentytwenty\sliced\sliced-invoice-display.php
 sliced-invoice-display.php
 
 wp-content\plugins\sliced-invoices\includes\template-tags
@@ -17,3 +24,94 @@ sliced-tags-display-modules.php
 
 ==> Add new master here
 sliced-admin-options.php
+
+
+/* Upload signature */
+
+=> user.php -- wp-admin\includes
+=> user.php -- wp-includes
+=> user-edit.php -- wp-admin
+
+
+FTP Username: petra@acc.petraarmoredvehicles.com
+FTP server: C01.TMDCLOUD.ASIA
+FTP & explicit FTPS port:  21
+PWD:4@softtech
+
+CPanel
+------
+URL :http://c01.tmdcloud.asia/cpanel
+ID:sarsofts
+Pwd:4@softtech
+
+
+
+
+
+http://demo.kathaastu.com/petra-invoice/
+
+1) Masters are gone
+2) Invoice level selection of Emission Standard, drop down with options like B4, B6. This woud have its own master with two fields Name of Emission Standard and Specification textbox (it would be a rich textbox)
+3) Along with regular items there is also "Additional options". I think we can add these items similarly like we add regular items. We should have a checkbox for each item where we can specify whether this item is in "Additiona options" or not. Items for which this checkbox would be checked they would be shown under Additional options.
+4) Terms of shipping / Shipping Cost
+	A, If Terms of Shipping will select there will be other dropdown for selection Ex-factory / FOB
+	B. If Shipping Cost will select other dropdown for selection C&F / CIF
+5) Need a master for signature, so the user who would be logged in, we need to store its credentials in rich textbox and show that value at the end of invoice, so if user A is logged in and he creates an invoice then his signature would be shown at the end of invoice. Check how this thing works in existing system.
+6) I will have the updated design today itself.
+
+
+
+1) Specification - We need drop down to add "Emission Type". Based on the Emission Type selected its description would be shown on Invoice.
+
+2) Line Items - We need Unit in invoice Line Items.
+
+3) Line Item - Uploading the images of car.
+
+4) Line Item - Show currency as selected in Invoice like USD, AUD etc.
+
+5) We need to Add Total of Additional Items.
+
+6) We need a section for the Signature which we can show at the bottom of Invoice. User who would create invoice, that user's signature would be shown at the bottom of invoice.1) Specification - We need drop down to add "Emission Type". Based on the Emission Type selected its description would be shown on Invoice.
+
+2) Line Items - We need Unit in invoice Line Items.
+
+3) Line Item - Uploading the images of car.
+
+4) Line Item - Show currency as selected in Invoice like USD, AUD etc.
+
+5) We need to Add Total of Additional Items.
+
+6) We need a section for the Signature which we can show at the bottom of Invoice. User who would create invoice, that user's signature would be shown at the bottom of invoice.
+
+
+
+
+
+1) Line Items - We need Unit in invoice Line Items.
+
+2) Line Item - Uploading the images of car. Make Description for item as rich text box, upload image there and show it under each item in Invoice.
+
+3) We need to Add Total of Additional Items. Disable check box so user can not overwrite the Additional Item setting done in master.
+
+4) We need a section for the Signature which we can show at the bottom of Invoice. User who would create invoice, that user's signature would be shown at the bottom of invoice. See how this setting can be applied to each logged in user.
+
+
+This doesn't look like what we have in design. Please check
+
+
+Also when I am creating a new invoice, and select the Emission Standard as B4, its specification doesn't come automatically. Specification textbox should get filled as soon as user would select Emission Standard
+
+1) Not able to change item quntity while adding it.
+2) Required validation while adding line item.
+3) Add Customer Id
+4) While adding invoice, it doesnt show total at the bottom.
+5) Also at line item, it was not showing amount for each item.
+6) Terms of shipping / Shipping Cost
+A, If Terms of Shipping will select there will be other dropdown for selection Ex-factory / FOB
+B. If Shipping Cost will select other dropdown for selection C&F / CIF
+Terms Of Shipping [Ex-Factory]
+Terms Of Shipping [FOB]
+Shipping Cost [C&F]
+Shipping Cost [CIF]
+
+7) Need a master for signature, so the user who would be logged in, we need to store its credentials in rich textbox and show that value at the end of invoice, so if user A is logged in and he creates an invoice then his signature would be shown at the end of invoice. Check how this thing works in existing system.

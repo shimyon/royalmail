@@ -14,125 +14,323 @@
 
 do_action( 'sliced_before_invoice_display' ); ?><!doctype html>
 <html <?php language_attributes(); ?>>
-<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />	
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
 	<title><?php wp_title() ?></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 	<meta name="robots" content="noindex,nofollow">
+<!--- sliced_head -->
+	
+	<!-- 
+		<?php do_action('sliced_head'); ?> 
+	-->
 
-	<?php do_action('sliced_head'); ?>
-	<?php do_action('sliced_invoice_head'); ?>
+<!--- sliced_invoice_head -->
+	<!-- 
+		<?php do_action('sliced_invoice_head'); ?> 
+	-->
 
+<style> 
+/*------- Font Family Starts -------*/
+@font-face { font-family: "Century-gothic"; src: url("https://acc.petraarmoredvehicles.com/wp-content/themes/twentytwenty/fonts/century-gothic.ttf"); }
+/*
+@font-face { font-family: "NotoSans-Light"; src: url("https://acc.petraarmoredvehicles.com/wp-content/themes/twentytwenty/fonts/NotoSans-Light.ttf"); }
+@font-face { font-family: "NotoSans-Regular"; src: url("https://acc.petraarmoredvehicles.com/wp-content/themes/twentytwenty/fonts/NotoSans-Regular.ttf"); }
+@font-face { font-family: "NotoSans-Medium"; src: url("https://acc.petraarmoredvehicles.com/wp-content/themes/twentytwenty/fonts/NotoSans-Medium.ttf"); }
+@font-face { font-family: "NotoSans-SemiBold"; src: url("https://acc.petraarmoredvehicles.com/wp-content/themes/twentytwenty/fonts/NotoSans-SemiBold.ttf"); }
+@font-face { font-family: "NotoSans-Bold"; src: url("https://acc.petraarmoredvehicles.com/wp-content/themes/twentytwenty/fonts/NotoSans-Bold.ttf"); }
+@font-face { font-family: "NotoSans-Black"; src: url("https://acc.petraarmoredvehicles.com/wp-content/themes/twentytwenty/fonts/NotoSans-Black.ttf"); }
+*/
+
+/*------- Font Family Ends -------*/
+
+/*------- Reset CSS Starts -------*/
+
+html { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+ul,
+h1,
+h2,
+h3,
+h4,
+p { margin: 0; padding: 0; }
+li { list-style: none; }
+a,
+a:hover,
+a:focus { text-decoration: none; transition: 0.5s linear; -webkit-transition: 0.5s linear; -moz-transition: 0.5s linear; -ms-transition: 0.5s linear; -o-transition: 0.5s linear; }
+
+/*------- Reset CSS Ends -------*/
+
+/*------- Common CSS Starts -------*/
+
+.text-center, .text-center td{
+	text-align: center!important;
+}
+
+
+.img-auto { margin: 0 auto; }
+.flex-align-center { -ms-align-items: center; align-items: center; display: -webkit-flex; display: -moz-flex; display: -ms-flex; display: -o-flex; display: flex; }
+
+/*------- Common CSS Ends -------*/
+.no-padding{padding: 0;}
+.ptb10{padding-top:10px; padding-bottom: 10px;}
+.full-width{width: 100%;}
+.text-right{text-align: right; padding-right: 10px;}
+
+table {
+/*border-spacing: 0;*/
+/*border:0;*/
+}
+th{white-space: nowrap;}
+th, td{
+	vertical-align: top;
+	text-align: left;
+}
+
+.logo {
+    position: fixed;    
+    top: 7px;
+    height: 100px;
+}
+
+table>tbody>tr>td, table>tbody>tr>th, table>tfoot>tr>td, table>tfoot>tr>th, table>thead>tr>td, table>thead>tr>th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    /*border-top: 1px solid #ddd;*/
+}
+
+table {
+    border-collapse: collapse; 
+}
+
+/*.br-black{border: solid 2px #000;}*/
+.bg-white{background-color: #fff; height: 70px;}
+.bg-black{background-color: #000; padding-top:5px; padding-bottom: 5px; color: #FFCC28;border:0; height: 10px;}
+.bg-black-bar{background-color: #000; padding-top:5px; padding-bottom: 5px; color: #FFCC28;border:0; /* height: 70px;margin-top: 60px; */}
+.bg-black-bar img{width: 354px;}
+.bg-black span{color: #fff;}
+.bg-black span li{display: inline-block;list-style: none;}
+.bg-yellow{background-color: #FFCC28; padding-top:5px; padding-bottom: 5px; color: #000;border:0;}
+h4.inline{display: inline-block;}
+.address{display: inline-block;}
+.bg-black h3{color: #FFCC28; text-transform: uppercase; font-weight: 600;}
+/*.table th{text-align: center; }*/
+table th{white-space: nowrap; font-weight: bold;}
+table td{border-top:none!important;}
+/*.table td:last-child{background-color: #ccc;}*/
+table li{list-style: unset;margin-left: 20px;}
+table strong{/* margin-top: 15px; */ display: block;}
+.table{margin-bottom: 0;}
+/*.br-around td{border: solid 1px #000; white-space: nowrap;}*/
+.br-top{border-top:solid 2px #000;}
+.yellow-txt{color:#FFCC28;}
+
+.ptb30{padding-top:30px; padding-bottom: 30px;}
+
+table > tbody > tr > .no-line {
+    border-top: none;
+}
+
+table > thead > tr > .no-line {
+    border-bottom: none;
+}
+
+table > tbody > tr > .thick-line {
+    border-top: 2px solid;
+}
+
+.vcentre{
+	vertical-align:bottom;
+}
+
+.table {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+td strong {
+	font-weight: 600;
+}
+
+.vcentre h3 {
+	font-size: 22px;
+	padding-right: 10px;
+	padding-top: 57px;
+}
+</style>
 </head>
 
 <?php do_action( 'sliced_invoice_before_body' ); ?>
 
-<body class="body sliced-invoice">
+<body>
 
-<?php do_action( 'sliced_invoice_after_body' ); ?>
+	<!-- Invoice Starts -->
+					<table class="full-width table">
+						<tbody>
+							<tr class="bg-white">
+								<td colspan="3"></td>
+								
+							</tr>
+							<tr class="bg-black-bar" height="100">
+								<td width="33.33%">
+									<div class="logo">
+										<?php echo sliced_get_business_logo() ? '<img style="height: 160px;" class="img-responsive" src="' . esc_url( sliced_get_business_logo() ) . '">' : '<h1>' . esc_html( sliced_get_business_name() ) . '</h1>' ?>
+									</div>
+								</td>
+								<td width="33.33%"> </td>
+								<td width="33.33%" style="color: #FFCC28;" class="text-right vcentre">
+									<div style="height: 82px;">
+										<h3>Invoice</h3>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<table class="full-width">
+										<tbody>
+											<tr>
+												<th>Customer ID:</th>
+												<td><?php echo sliced_get_userid(); ?></td>
+												<td colspan="3" width="50%"></td>
+												<th>Date:<br>Quaotation No.:</th>
+												<td> <?php sliced_display_invoice_details_date(); ?><br><?php sliced_display_invoice_details_number(); ?></td>
+											</tr>
 
-	<div class="container sliced-wrap">
+											<tr>
+												
+												<th>Buyer:</th>
+												<td><?php sliced_display_invoice_buyer(); ?></td>
+												<td colspan="3" width="50%"></td>
+												<th>Contact Us:</th>
+												<td>
+													<?php echo sliced_get_business_address() ? '<div class="address">' . wpautop( wp_kses_post( sliced_get_business_address() ) ) . '</div>' : ''; ?>
+												</td>
+												<td></td>
 
-	<?php if ( $watermark = sliced_get_invoice_watermark() ) : ?>
-		<div class="watermark no-print"><p><?php echo esc_html( $watermark ) ?></p></div>
-	<?php endif; ?>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									
+								</td>
+							</tr>
+							<tr class="bg-black">
+								<td colspan="3">
+									<table class="full-width">
+									</table>
+								</td>
+							</tr>
 
-		<!-- ///// Start PDF header -->
-		<htmlpageheader name="sliced-pdf-header">
+							<tr>
+								<td colspan="3" class="no-padding">
+									<table class="full-width">
+										<tbody>
+											<tr class="bg-yellow">
+												<th>Sl No</th>
+												<th>Description</th>
+												<th>Quantity</th>								
+												<th>Unit</th>
+												<th>Rate in USD</th>
+												<th>Total in USD</th>								
+											</tr>
 
-			<div class="row sliced-header">
-				<div class="col-xs-12 col-sm-6 sliced-business">
-					<?php sliced_display_business(); ?>
-				</div>
+											<?php sliced_display_line_items_new(); ?>	
 
-				<div class="col-xs-12 col-sm-6 sliced-title">
-					<h2><?php echo esc_html( sliced_get_invoice_label() ); ?></h2>
-				</div>
-			</div><!-- END row -->
+											<!-- Additional option -->
+											<?php 
+												$additional = sliced_display_line_items_new(true); 
+												if (!empty($additional)) {
+													echo '<tr>
+															<td>&nbsp;</td>
+															<td colspan="5">
+																<strong>Additional Option</strong>
+															</td>	
+														</tr>';
+													echo $additional;
+												}
+											?>
 
-		</htmlpageheader>
-		<!-- End PDF header ///// -->
+											<tr>
+												<td colspan="6">&nbsp;</td>	
+											</tr>
+
+											<tr>
+												<td colspan="4">&nbsp;</td>	
+												<td style="font-weight: bold;">Total CIF Lagos</td>	
+												<td style="font-weight: bold;"><?php echo esc_html( sliced_get_quote_total() ); ?></td>	
+											</tr>						
+
+											<tr>
+												<td colspan="6">
+													<div class="row sliced-footer">
+														<div class="col-sm-12">
+															<div class="terms-text"><?php echo sliced_get_invoice_specification(); ?></div>
+														</div>
+													</div><!-- END row -->
+												</td>	
+											</tr>						
+
+											<tr>
+												<td colspan="6">
+													<?php echo wpautop( sliced_get_invoice_terms() ); ?>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="6">
+
+													<table>
+														<tbody>												
+															<tr>
+																<td colspan="5">
+																</td>
+															</tr>									
+															<tr>
+																<td colspan="5"></td>
+															</tr>
+															<tr>
+																<td colspan="5"></td>
+															</tr>
+															<tr>
+																<td colspan="5"></td>
+															</tr>
+															<tr class="ptb10">
+																<td></td>
+																<td></td>
+																<td colspan="3">
+																	<?php 
+																		echo "<img id='img' height='150' src='" . sliced_get_user_signature() . "'>";
+																	?>
+																</td>										
+
+																<td></td>										
+															</tr>
+
+														</tbody>
+													</table>
+												</td>
+											</tr>
+
+											<tr class="bg-black text-center ptb30">
+												<td colspan="6" style="text-align: center; color:#fff;">
+													<?php echo sliced_get_business_address() ? '<div class="address">' . wpautop( wp_kses_post( sliced_get_business_address() ) ) . '</div>' : ''; ?>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+	<!-- Invoice Ends -->
 
 
-		<div class="row sliced-upper">
-			<div class="col-xs-12 col-sm-6 sliced-from-address sliced-address-from">
-				<?php sliced_display_from_address(); ?>
-			</div>
-
-			<div class="col-xs-12 col-sm-5 sliced-details">
-				<?php sliced_display_invoice_details(); ?>
-			</div>
-		</div><!-- END row -->
-
-
-		<div class="row sliced-middle">
-			<div class="col-xs-12 col-sm-6 sliced-to-address sliced-address-to">
-				<?php sliced_display_to_address(); ?>
-			</div>
-		</div><!-- END row -->
-
-
-		<?php if ( sliced_get_invoice_description() ) : ?>
-
-			<div class="row sliced-lower">
-				<div class="col-sm-12 sliced-description">
-					<?php echo wpautop( sliced_get_invoice_description() ); ?>
-				</div>
-			</div><!-- END row -->
-
-		<?php endif; ?>
-
-
-		<div class="row sliced-items">
-			<div class="col-sm-12 sliced-line-items">
-				<div class="table-responsive">
-					<?php sliced_display_line_items(); ?>
-				</div>
-			</div>
-		</div>
-		<div class="row sliced-items">
-			<div class="col-xs-12 col-sm-5 sliced-totals">
-				<?php sliced_display_invoice_totals(); ?>
-			</div>
-		</div><!-- END row -->
-
-		<?php if( sliced_is_payment_method( 'generic' ) || sliced_is_payment_method( 'bank' ) ) : ?>
-		<div class="row sliced-payments">
-			<div class="col-sm-12">
-				<?php if( sliced_is_payment_method( 'generic' ) ) : ?>
-					<div class="generic"><?php echo wpautop( sliced_get_business_generic_payment() ); ?></div>
-				<?php endif; ?>
-				<?php if( sliced_is_payment_method( 'bank' ) ) : ?>
-					<div class="bank"><?php echo wpautop( sliced_get_business_bank() ); ?></div>
-				<?php endif; ?>
-			</div>
-		</div><!-- END row -->
-		<?php endif; ?>
-		
-		<div class="row sliced-footer">
-			<div class="col-sm-12">
-				<div class="terms-text"><?php echo wpautop( sliced_get_invoice_terms() ); ?></div>
-			</div>
-		</div><!-- END row -->
-
-		<!-- ///// Start PDF footer -->
-		<htmlpagefooter name="sliced-pdf-footer">
-
-			<div class="row sliced-footer">
-				<div class="col-sm-12">
-					<div class="footer-text"><?php echo sliced_get_invoice_footer(); ?></div>
-					<div class="print-only"><?php _e( 'Page ', 'sliced-invoices') ?> {PAGENO}/{nbpg}</div>
-				</div>
-			</div><!-- END row -->
-
-		</htmlpagefooter>
-		<!-- End PDF footer ///// -->
-
-
-	</div> <!-- END sliced-wrap6 -->
-
-<?php do_action( 'sliced_invoice_footer' ); ?>
-<?php do_action( 'sliced_template_footer' ); ?>
 </body>
 
 </html>

@@ -4626,9 +4626,11 @@ class Sliced_Admin {
 
 				$desc  = isset( $item_array[3] ) ? trim( $item_array[3] ) : '';
 
+				$emission_type  = isset( $item_array[3] ) ? trim( $item_array[4] ) : 'N';
 
 
-				$price_array[] = "<option value='" . esc_html( $title ) . "' data-qty='" . esc_html( $qty ) . "' data-price='" . esc_html( $price ) . "' data-title='" . esc_html( $title ) . "' data-desc='" . wp_kses_post( $desc ) . "'>" . esc_html( $title ) . "</option>";
+
+				$price_array[] = "<option style='" . ($emission_type == 'Y' ? "color:red;" : "") . "' value='" . esc_html( $title ) . "' data-emission=" . esc_html($emission_type) . " data-qty='" . esc_html( $qty ) . "' data-price='" . esc_html( $price ) . "' data-title='" . esc_html( $title ) . "' data-desc='" . wp_kses_post( $desc ) . "'>" . esc_html( $title ) . "</option>";
 
 
 
@@ -4650,6 +4652,187 @@ class Sliced_Admin {
 
 
 
+	}
+
+
+
+	/**
+
+	 * Get the Specification line items dropdown
+
+	 *
+
+	 * @since 	2.0.0
+
+	 */
+
+	public static function get_emission_specification_items() {
+
+
+
+		/*
+
+		 * fetch pre-defined items
+
+		 */
+
+		$general     = get_option( 'sliced_general' );
+
+		$specifi_emission = isset( $general['specifi_emission'] ) ? $general['specifi_emission'] : '';
+
+
+
+		/*
+
+		 * Explode each line into an array
+
+		 */
+
+		$items = explode("@specification@", $specifi_emission);
+
+		$items = array_filter( $items ); // remove any empty items
+
+		$price_array[] = "<option value='' data-specification='' data-emission=''>" . __( 'Armouring Level', 'sliced-invoices' ) . "</option>";
+
+
+
+		/*
+
+		 * Check that we have items
+
+		 */
+
+		if( $items ) :
+
+
+
+			$index = 0;
+
+			foreach ( $items as $item ) {
+
+			
+
+				$item_array = explode( '@emission@', $item );
+
+				$emission   = isset( $item_array[0] ) ? trim( $item_array[0] ) : '';
+
+				$spe = isset( $item_array[1] ) ? trim( $item_array[1] ) : '';
+
+
+
+				$price_array[] = "<option value='" . esc_html( $spe ) . "' data-specification='" . esc_html( $spe ) . "' data-emission='" . esc_html( $emission ) . "'>" . esc_html( $emission ) . "</option>";
+
+
+
+				$index++;
+
+			}
+
+
+
+		endif;
+
+
+
+		$set_items = "<select class='specifi_emission_products'>" . implode( "", $price_array ) . "</select>";
+
+
+
+		return $set_items;
+
+
+
+	}
+
+
+
+	/**
+
+	 * Get the term of shipping line items dropdown
+
+	 *
+
+	 * @since 	2.0.0
+
+	 */
+
+	public static function get_term_of_shipping_items() {
+
+
+
+		/*
+
+		 * fetch pre-defined items
+
+		 */
+        $veh_array  = array();
+
+		$general     = get_option( 'sliced_general' );
+		// echo "GeneralItemHere.";
+		// foreach($general as $key => $value) {
+		//   echo "$key is at $value";
+		// }
+		$vehicle_type = isset( $general['term_of_shipping'] ) ? $general['term_of_shipping'] : '';
+
+
+
+		/*
+
+		 * Explode each line into an array
+
+		 */
+
+		$items = explode("\n", $vehicle_type);
+
+		$items = array_filter( $items ); // remove any empty items
+
+		// $price_array[] = "<option value=''>" . __( 'Select Vehicle Type', 'sliced-invoices' ) . "</option>";
+
+
+
+		/*
+
+		 * Check that we have items
+
+		 */
+
+		if( $items ) :
+
+
+
+			$index = 0;
+
+			foreach ( $items as $item ) {
+
+			
+
+				$item_array = explode( '|', $item );
+
+				$name   = isset( $item_array[0] ) ? trim( $item_array[0] ) : '';
+
+				$value = isset( $item_array[1] ) ? trim( $item_array[1] ) : '';
+
+				$veh_array[$name] = $value;
+
+				// $price_array[] = "<option value='" . esc_html( $value ) . "'>" . esc_html( $name ) . "</option>";
+
+
+
+				$index++;
+
+			}
+
+
+
+		endif;
+
+
+
+		// $set_items = "<select name='vehicle_type_products' class='vehicle_type_products'>" . implode( "", $price_array ) . "</select>";
+		// return $set_items;
+
+
+        return apply_filters( 'sliced_register_get_term_of_shipping_items', $veh_array );
 	}
 
 	/**

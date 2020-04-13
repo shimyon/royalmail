@@ -492,7 +492,7 @@ class Sliced_Options {
 
 					'name'      => __( 'Pre-Defined Line Items', 'sliced-invoices' ),
 
-					'desc'      => __( 'Add 1 line item per line in this format: Qty | Title | Price | Description. Each field separated with a | symbol. <br>Price should be numbers only, no currency symbol.<br>If you prefer to have an item blank, you still need the | symbol like so: 1 | Web Design | | Designing the web', 'sliced-invoices' ),
+					'desc'      => __( 'Add 1 line item per line in this format: Qty | Title | Price | Description | Armouring Level. Each field separated with a | symbol. <br>Price should be numbers only, no currency symbol.<br>If you prefer to have an item blank, you still need the | symbol like so: 1 | Web Design | | Designing the web | Y/N', 'sliced-invoices' ),
 
 					'default'   => '',
 
@@ -502,83 +502,121 @@ class Sliced_Options {
 
 					'attributes' => array(
 
-						'placeholder' => '1 | Title goes here | 85 | Description goes here and basic HTML is allowed.',
+						'placeholder' => '1 | Title goes here | 85 | Description goes here and basic HTML is allowed | Y/N.',
 
 					)
 
 				),
 				array(
 
-					'name'      => __( 'Vehicle Type', 'sliced-invoices' ),
+					'name'      => __( 'Specification', 'sliced-invoices' ),
 
-					'desc'      => __( 'Add 1 line item per line in this format: Vehicle Type Name | Vehicle Type Value. ex. Hatchback|Hatchback' ),
+					'desc'      => __( 'Add specification like this format: Emission Type @emission@ Specification @specification@. <br>ex. B4@emission@Car specification@specification@' ),
 
 					'default'   => '',
 
-					'id'        => 'vehicle_type',
+					'id'        => 'specifi_emission',
 
 					'type'      => 'textarea_small',
 
 					'attributes' => array(
 
-						'placeholder' => 'Hatchback|Hatchback',
+						'placeholder' => 'B4@emission@B4 Car specification@specification@',
 
 					)
 
 				),
 				array(
 
-					'name'      => __( 'Brand Type', 'sliced-invoices' ),
+					'name'      => __( 'Terms Of Shipping / Shipping Cost', 'sliced-invoices' ),
 
-					'desc'      => __( 'Add 1 line item per line in this format: Brand Type Name | Brand Type Value. ex. Ford|Ford' ),
+					'desc'      => __( 'Add 1 line item per line in this format: Terms Of Shipping / Shipping Cost Name | Terms Of Shipping / Shipping Cost Value. ex. Terms Of Shipping [Ex-Factory]|Terms Of Shipping [Ex-Factory]' ),
 
 					'default'   => '',
 
-					'id'        => 'brand_type',
+					'id'        => 'term_of_shipping',
 
 					'type'      => 'textarea_small',
 
 					'attributes' => array(
 
-						'placeholder' => 'Ford|Ford',
+						'placeholder' => 'Terms Of Shipping [Ex-Factory]|Terms Of Shipping [Ex-Factory]',
 
 					)
 
 				),
-				array(
+				// array(
 
-					'name'      => __( 'Year of Make', 'sliced-invoices' ),
+				// 	'name'      => __( 'Vehicle Type', 'sliced-invoices' ),
 
-					'id'        => 'year_of_make',
+				// 	'desc'      => __( 'Add 1 line item per line in this format: Vehicle Type Name | Vehicle Type Value. ex. Hatchback|Hatchback' ),
 
-					'desc'      => __( 'The year of the make', 'sliced-invoices' ),
+				// 	'default'   => '',
 
-					'type'      => 'textarea_small',
+				// 	'id'        => 'vehicle_type',
 
-					'attributes' => array(
+				// 	'type'      => 'textarea_small',
 
-						'placeholder' => '2019|2019',
+				// 	'attributes' => array(
 
-					)
+				// 		'placeholder' => 'Hatchback|Hatchback',
 
-				),
-				array(
+				// 	)
 
-					'name'      => __( 'Color', 'sliced-invoices' ),
+				// ),
+				// array(
 
-					'id'        => 'color',
+				// 	'name'      => __( 'Brand Type', 'sliced-invoices' ),
 
-					'desc'      => __( 'Add color here', 'sliced-invoices' ),
+				// 	'desc'      => __( 'Add 1 line item per line in this format: Brand Type Name | Brand Type Value. ex. Ford|Ford' ),
 
-					'type'      => 'textarea_small',
+				// 	'default'   => '',
 
-					'attributes' => array(
+				// 	'id'        => 'brand_type',
 
-						'placeholder' => 'Red|Red',
+				// 	'type'      => 'textarea_small',
 
-					)
+				// 	'attributes' => array(
 
-				)
+				// 		'placeholder' => 'Ford|Ford',
+
+				// 	)
+
+				// ),
+				// array(
+
+				// 	'name'      => __( 'Year of Make', 'sliced-invoices' ),
+
+				// 	'id'        => 'year_of_make',
+
+				// 	'desc'      => __( 'The year of the make', 'sliced-invoices' ),
+
+				// 	'type'      => 'textarea_small',
+
+				// 	'attributes' => array(
+
+				// 		'placeholder' => '2019|2019',
+
+				// 	)
+
+				// ),
+				// array(
+
+				// 	'name'      => __( 'Color', 'sliced-invoices' ),
+
+				// 	'id'        => 'color',
+
+				// 	'desc'      => __( 'Add color here', 'sliced-invoices' ),
+
+				// 	'type'      => 'textarea_small',
+
+				// 	'attributes' => array(
+
+				// 		'placeholder' => 'Red|Red',
+
+				// 	)
+
+				// )
 
 
 

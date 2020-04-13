@@ -394,6 +394,20 @@ if ( ! function_exists( 'sliced_get_pre_defined_items' ) ) :
 
 endif;
 
+if ( ! function_exists( 'sliced_emission_specification_items' ) ) :
+
+
+
+	function sliced_emission_specification_items() {
+
+		$output = Sliced_Admin::get_emission_specification_items();
+
+		echo apply_filters( 'sliced_emission_specification_items', $output );
+
+	}
+
+endif;
+
 
 if ( ! function_exists( 'sliced_get_vehicle_type_items' ) ) :
 
@@ -402,6 +416,17 @@ if ( ! function_exists( 'sliced_get_vehicle_type_items' ) ) :
 		// echo apply_filters( 'sliced_get_vehicle_type_items', $output );
 		$output = Sliced_Admin::get_vehicle_type_items();
 		return apply_filters( 'sliced_get_vehicle_type_items', $output );
+	}
+
+endif;
+
+if ( ! function_exists( 'sliced_get_term_of_shipping_items' ) ) :
+
+	function sliced_get_term_of_shipping_items() {
+		// $output = Sliced_Admin::get_vehicle_type_items();
+		// echo apply_filters( 'sliced_get_vehicle_type_items', $output );
+		$output = Sliced_Admin::get_term_of_shipping_items();
+		return apply_filters( 'sliced_get_term_of_shipping_items', $output );
 	}
 
 endif;

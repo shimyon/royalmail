@@ -108,6 +108,38 @@ endif;
 
 
 
+if ( ! function_exists( 'sliced_display_invoice_buyer' ) ) :
+	function sliced_display_invoice_buyer() {
+		?>
+			<span>
+				<?php echo esc_html( sliced_get_client_business() ); ?>
+			</span>
+		<?php	
+	}
+
+endif;
+
+if ( ! function_exists( 'sliced_display_invoice_details_number' ) ) :
+	function sliced_display_invoice_details_number() {
+		?>
+			<span>
+				<?php echo esc_html( sliced_get_invoice_prefix() ); ?><?php echo esc_html( sliced_get_invoice_number() ); ?><?php echo esc_html( sliced_get_invoice_suffix() ); ?>
+			</span>
+		<?php	
+	}
+
+endif;
+
+if ( ! function_exists( 'sliced_display_invoice_details_date' ) ) :
+	function sliced_display_invoice_details_date() {
+		?>
+			<span>
+				<?php echo Sliced_Shared::get_local_date_i18n_from_timestamp( sliced_get_invoice_created() ); ?>
+			</span>
+		<?php	
+	}
+
+endif;
 
 
 if ( ! function_exists( 'sliced_display_invoice_details' ) ) :
@@ -436,6 +468,136 @@ if ( ! function_exists( 'sliced_display_line_items' ) ) :
 
 
 		echo $output;
+
+
+
+	}
+
+
+
+endif;
+
+
+if ( ! function_exists( 'sliced_display_line_items_new' ) ) :
+
+
+
+	function sliced_display_line_items_new($optAddtional = false) {
+
+	
+
+		$shared = new Sliced_Shared;
+
+		$translate = get_option( 'sliced_translate' );
+
+
+
+		$output = '';
+
+
+
+			$count = 0;
+
+			$sno = 0;
+
+			$items = sliced_get_invoice_line_items(); // gets quote and invoice
+
+			if( !empty( $items ) && !empty( $items[0] ) ) :
+
+
+
+				foreach ( $items[0] as $item ) {
+
+					$isAdditionOpt = isset($item["additional_option"]) ? ($item["additional_option"]  == 'on') : false;
+
+					if ((!$isAdditionOpt && !$optAddtional) || ($isAdditionOpt && $optAddtional)) {
+					
+
+					$sno = $sno + 1;
+
+					$class = ($count % 2 == 0) ? "even" : "odd";
+
+
+
+					$vehicle_type = isset( $item["vehicle_type"] ) ? $item["vehicle_type"] : "";
+
+					$brand_type = isset( $item["brand_type"] ) ? $item["brand_type"] : "";
+
+					$qty = isset( $item["qty"] ) ? $item["qty"] : 0;
+
+					$unit = isset( $item["unit"] ) ? $item["unit"] : 0;
+
+					$amt = isset( $item["amount"] ) ? $shared->get_raw_number( $item["amount"] ) : 0;
+
+					$tax = isset( $item["tax"] ) ? $shared->get_raw_number( $item["tax"] ) : "0.00";
+
+					$line_total = $shared->get_line_item_sub_total( $shared->get_raw_number( $qty ), $amt, $tax );
+
+					
+
+						$output .= '<tr class="row_' . $class . ' sliced-item">
+
+
+							<td class="sno">' . esc_html__( $sno ) . '</td>
+
+
+							<td class="service" style="font-weight: '. esc_html__($optAddtional ? 'normal' : 'bold') . ';">' . esc_html__( isset( $item["title"] ) ? $item["title"] : "" );
+
+								if ( isset( $item["description"] ) && !$optAddtional) :
+
+									$output .= '<br/><span class="description">' . wpautop( wp_kses_post( $item["description"] ) ) . '</span>';
+
+								endif;
+
+							$output .= '</td>
+
+							<td class="qty">' . esc_html__($optAddtional ? 1 : $qty) . '</td>
+
+							<td class="unit">' . esc_html__( esc_html__($optAddtional ? 'Set' : 'Unit') ) . '</td>
+
+
+							<td class="rate">' . esc_html__( $shared->get_formatted_currency( $amt ) ) . '</td>
+
+							';
+
+							if ( sliced_hide_adjust_field() === false) {
+
+								$output .= '<td class="adjust">' . esc_html__( $tax . "%" ) . '</td>';
+
+							}
+
+							$output .= '<td class="total">';
+							if (!$optAddtional) {
+								$output .= esc_html__( $shared->get_formatted_currency( $line_total ) );
+							}
+							$output .= '&nbsp;</td>';
+
+
+
+						$output .='</tr>';
+
+
+
+					$count++;
+					}
+				}
+
+			endif;
+
+
+
+
+
+			$output = apply_filters( 'sliced_invoice_line_items_output', $output );
+
+
+		if ($optAddtional) {			
+			return $output;
+		}
+		else
+		{
+			echo $output;
+		}
 
 
 

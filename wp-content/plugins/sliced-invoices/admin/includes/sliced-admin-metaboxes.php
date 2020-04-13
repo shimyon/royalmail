@@ -204,7 +204,7 @@ class Sliced_Metaboxes {
 
 			'id'           => $prefix . 'the_description',
 
-			'title'        => __( 'Description', 'sliced-invoices' ),
+			'title'        => __( 'Notes', 'sliced-invoices' ),
 
 			'object_types' => array( 'sliced_quote', 'sliced_invoice' ),
 
@@ -245,11 +245,107 @@ class Sliced_Metaboxes {
 		) );
 
 		
-
 		do_action( 'sliced_after_description', $description );
 
+
+		//Specification
+
+		$specification = new_cmb2_box( array(
+
+			'id'           => $prefix . 'the_specification',
+
+			'title'        => __( 'Specification', 'sliced-invoices' ),
+
+			'object_types' => array( 'sliced_quote', 'sliced_invoice' ),
+
+			'context'      => 'normal',
+
+			'priority'     => 'high',
+
+		) );
+
+
+
+		// $vehicle_type = array_merge( array( '' => '' ), sliced_get_vehicle_type_items() );
+
+		$specification->add_field(array(
+
+			'name' =>  __( 'Emission', 'sliced-invoices' ),
+
+			'id'   => 'sel_emission',
+
+			'type'       => 'select',
+
+			// 'options' => $vehicle_type,
+			'render_row_cb' => 'sliced_emission_specification_items'
+		) );
 		
 
+		$specification->add_field( array(
+
+			'name'    => '',
+
+			'id'      => $prefix . 'specification',
+
+			'type'    => 'wysiwyg',
+
+			'options' => array(
+
+				'wpautop' => true, // use wpautop?
+
+				'media_buttons' => true, // show insert/upload button(s)
+
+				'textarea_rows' => get_option('default_post_edit_rows', 5), // rows="..."
+
+				'teeny' => true, // output the minimal editor config used in Press This
+
+				'dfw' => false, // replace the default fullscreen with DFW (needs specific css)
+
+				'tinymce' => true, // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
+
+				'quicktags' => true // load Quicktags, can be used to pass settings directly to Quicktags using an array()
+
+			),
+
+		) );
+		
+
+		do_action( 'sliced_after_specification', $specification);
+
+
+
+		//Specification
+
+		$termofshipping = new_cmb2_box( array(
+
+			'id'           => $prefix . 'the_termofshipping',
+
+			'title'        => __( 'Terms Of Shipping / Shipping Cost', 'sliced-invoices' ),
+
+			'object_types' => array( 'sliced_quote', 'sliced_invoice' ),
+
+			'context'      => 'normal',
+
+			'priority'     => 'high',
+
+		) );
+
+
+
+		$term_of_shipping = array_merge( array( '' => '' ), sliced_get_term_of_shipping_items() );
+
+		$termofshipping->add_field(array(
+
+			'name' =>  __( 'Terms Of Shipping / Shipping Cost', 'sliced-invoices' ),
+
+			'id'   => 'sel_temsofshipping',
+
+			'type'       => 'select',
+
+			'options' => $term_of_shipping
+		) );
+
+		do_action( 'sliced_after_termofshipping', $termofshipping);
 
 
 		$line_items = new_cmb2_box( array(
@@ -261,6 +357,7 @@ class Sliced_Metaboxes {
 			'object_types' => array( 'sliced_quote', 'sliced_invoice' ),
 
 		) );
+
 
 
 
@@ -285,6 +382,40 @@ class Sliced_Metaboxes {
 		) );
 
 
+
+
+		$line_items->add_group_field( $line_items_group_id, array(
+
+			'name'        => __( 'Description', 'sliced-invoices' ),
+
+			'id'          => 'description',
+
+			'type'        => 'wysiwyg',
+
+			'options' => array(
+
+				'wpautop' => true, // use wpautop?
+
+				'media_buttons' => true, // show insert/upload button(s)
+
+				'textarea_rows' => get_option('default_post_edit_rows', 5), // rows="..."
+
+				'teeny' => true, // output the minimal editor config used in Press This
+
+				'dfw' => false, // replace the default fullscreen with DFW (needs specific css)
+
+				'tinymce' => true, // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
+
+				'quicktags' => true // load Quicktags, can be used to pass settings directly to Quicktags using an array()
+
+			)
+			// ,'attributes'  => array(
+
+			// 	'placeholder' => __( 'Brief description of the work carried out for this line item (optional)', 'sliced-invoices' ),
+
+			// 	'cols' => 80
+			// )
+		) );
 
 		$line_items->add_group_field( $line_items_group_id, array(
 
@@ -359,7 +490,7 @@ class Sliced_Metaboxes {
 
 
 
-		$line_items->add_group_field( $line_items_group_id, array(
+		$seperate = $line_items->add_group_field( $line_items_group_id, array(
 
 			'name'            => '<span class="pull-left">' . sprintf( __( 'Rate (%s)', 'sliced-invoices' ), sliced_get_currency_symbol() ) . '</span><span class="pull-right">' . sprintf( __( 'Amount (%s)', 'sliced-invoices' ), sliced_get_currency_symbol() ) . '</span>',
 
@@ -391,82 +522,79 @@ class Sliced_Metaboxes {
 
 
 
-		$vehicle_type = array_merge( array( '' => '' ), sliced_get_vehicle_type_items() );
+		// $vehicle_type = array_merge( array( '' => '' ), sliced_get_vehicle_type_items() );
 
-		$line_items->add_group_field( $line_items_group_id, array(
+		// $line_items->add_group_field( $line_items_group_id, array(
 
-			'name' =>  __( 'Vehicle Type', 'sliced-invoices' ),
+		// 	'name' =>  __( 'Vehicle Type', 'sliced-invoices' ),
 
-			'id'   => 'vehicle_type',
+		// 	'id'   => 'vehicle_type',
 
-			'type'       => 'select',
+		// 	'type'       => 'select',
 
-			'options' => $vehicle_type,
-			// 'render_row_cb' => 'sliced_get_vehicle_type_items'
-		) );
+		// 	'options' => $vehicle_type,
+		// 	// 'render_row_cb' => 'sliced_get_vehicle_type_items'
+		// ) );
 
-		$brand_type = array_merge( array( '' => '' ), sliced_get_brand_type_items() );
-		$line_items->add_group_field( $line_items_group_id, array(
+		// $brand_type = array_merge( array( '' => '' ), sliced_get_brand_type_items() );
+		// $line_items->add_group_field( $line_items_group_id, array(
 
-			'name' =>  __( 'Brand Type', 'sliced-invoices' ),
+		// 	'name' =>  __( 'Brand Type', 'sliced-invoices' ),
 
-			'id'   => 'brand_type',
+		// 	'id'   => 'brand_type',
 
-			'type'       => 'select',
+		// 	'type'       => 'select',
 
-			'options' => $brand_type,
+		// 	'options' => $brand_type,
 
-			// 'render_row_cb' => 'sliced_get_brand_type_items'
-		) );
+		// 	// 'render_row_cb' => 'sliced_get_brand_type_items'
+		// ) );
 
-		$year_of_make = array_merge( array( '' => '' ), sliced_get_year_of_make_items() );
-		$line_items->add_group_field( $line_items_group_id, array(
+		// $year_of_make = array_merge( array( '' => '' ), sliced_get_year_of_make_items() );
+		// $line_items->add_group_field( $line_items_group_id, array(
 
-			'name' =>  __( 'Year of Make', 'sliced-invoices' ),
+		// 	'name' =>  __( 'Year of Make', 'sliced-invoices' ),
 
-			'id'   => 'year_of_make',
+		// 	'id'   => 'year_of_make',
 
-			'type'       => 'select',
+		// 	'type'       => 'select',
 
-			'options' => $year_of_make,
+		// 	'options' => $year_of_make,
 
-			// 'render_row_cb' => 'sliced_get_brand_type_items'
-		) );
+		// 	// 'render_row_cb' => 'sliced_get_brand_type_items'
+		// ) );
 			
 
-		$color = array_merge( array( '' => '' ), sliced_get_color_items() );
-		$line_items->add_group_field( $line_items_group_id, array(
+		// $color = array_merge( array( '' => '' ), sliced_get_color_items() );
+		// $line_items->add_group_field( $line_items_group_id, array(
 
-			'name' =>  __( 'Color', 'sliced-invoices' ),
+		// 	'name' =>  __( 'Color', 'sliced-invoices' ),
 
-			'id'   => 'color',
+		// 	'id'   => 'color',
 
-			'type'       => 'select',
+		// 	'type'       => 'select',
 
-			'options' => $color,
+		// 	'options' => $color,
 
-			// 'render_row_cb' => 'sliced_get_brand_type_items'
-		) );
+		// 	// 'render_row_cb' => 'sliced_get_brand_type_items'
+		// ) );
 			
-		$line_items->add_group_field( $line_items_group_id, array(
+		// $line_items->add_group_field( $line_items_group_id, array(
 
-			'name'        => __( 'Description', 'sliced-invoices' ),
+		// 	'name'        => __( 'Description', 'sliced-invoices' ),
 
-			'id'          => 'description',
+		// 	'id'          => 'description',
 
-			'type'        => 'textarea_small',
+		// 	'type'        => 'textarea_small',
 
-			'attributes'  => array(
+		// 	'attributes'  => array(
 
-				'placeholder' => __( 'Brief description of the work carried out for this line item (optional)', 'sliced-invoices' ),
+		// 		'placeholder' => __( 'Brief description of the work carried out for this line item (optional)', 'sliced-invoices' ),
 
-				'cols' => 80,
+		// 		'cols' => 80
+		// 	)
+		// ) );
 
-			),
-
-			
-
-		) );
 
 		
 
@@ -483,6 +611,43 @@ class Sliced_Metaboxes {
 			'attributes'  => array(
 
 				'class'       => 'item_taxable',
+
+			),
+
+		) );
+
+
+		$line_items->add_group_field( $line_items_group_id, array(
+
+			'name'        => __( 'Additional Option', 'sliced-invoices' ),
+
+			'id'          => 'additional_option',
+
+			'type'        => 'checkbox',
+
+			'default'     => $this->cmb2_set_checkbox_default_for_new_post( true ),
+
+			'attributes'  => array(
+
+				'class'       => 'item_taxable clsadditional_option', 
+
+			),
+
+		) );
+
+		$line_items->add_group_field( $line_items_group_id, array(
+
+			'name'        => __( 'Add in Total', 'sliced-invoices' ),
+
+			'id'          => 'additional_option_show',
+
+			'type'        => 'checkbox',
+
+			'default'     => $this->cmb2_set_checkbox_default_for_new_post( true ),
+
+			'attributes'  => array(
+
+				'class'       => 'item_taxable clsadditional_option_show',
 
 			),
 
@@ -733,6 +898,54 @@ class Sliced_Metaboxes {
 		do_action( 'sliced_after_payments', $payments_group_id, $payments );
 
 		
+
+		// // Signature
+		// $signature = new_cmb2_box( array(
+
+		// 	'id'           => $prefix . 'the_signature',
+
+		// 	'title'        => __( 'Signature', 'sliced-invoices' ),
+
+		// 	'object_types' => array( 'sliced_quote', 'sliced_invoice' ),
+
+		// 	'context'      => 'normal',
+
+		// 	'priority'     => 'high',
+
+		// ) );
+
+		
+
+		// $signature->add_field( array(
+
+		// 	'name'    => '',
+
+		// 	'id'      => $prefix . 'signature',
+
+		// 	'type'    => 'wysiwyg',
+
+		// 	'options' => array(
+
+		// 		'wpautop' => true, // use wpautop?
+
+		// 		'media_buttons' => true, // show insert/upload button(s)
+
+		// 		'textarea_rows' => get_option('default_post_edit_rows', 5), // rows="..."
+
+		// 		'teeny' => true, // output the minimal editor config used in Press This
+
+		// 		'dfw' => false, // replace the default fullscreen with DFW (needs specific css)
+
+		// 		'tinymce' => true, // load TinyMCE, can be used to pass settings directly to TinyMCE using an array()
+
+		// 		'quicktags' => true // load Quicktags, can be used to pass settings directly to Quicktags using an array()
+
+		// 	),
+
+		// ) );
+
+		
+		// do_action( 'sliced_after_payments', $signature );
 
 
 

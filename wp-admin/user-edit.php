@@ -539,6 +539,18 @@ endif; //!IS_PROFILE_PAGE
 	<td><input type="url" name="url" id="url" value="<?php echo esc_attr( $profileuser->user_url ); ?>" class="regular-text code" /></td>
 	</tr>
 
+	<tr class="user-url-wrap">
+	<th><label for="url"><?php _e( 'Signature' ); ?></label></th>
+	<td>
+		<input type="file" name="signature" id="Signature" class="regular-text code" />
+		<input type="hidden" name="signature_value" id="signature_value" value="<?php echo esc_attr( $profileuser->signature_value ); ?>">
+		<?php
+			echo "<img id='img' height='150' src='" . (isset($profileuser->signature_value) ? $profileuser->signature_value : "") . "'>"
+		?>
+		
+	</td>
+	</tr>
+
 		<?php
 		foreach ( wp_get_user_contact_methods( $profileuser ) as $name => $desc ) {
 			?>
@@ -787,6 +799,23 @@ endif; //!IS_PROFILE_PAGE
 	if (window.location.hash == '#password') {
 		document.getElementById('pass1').focus();
 	}
+	function readFile() {  
+	  if (this.files && this.files[0]) {
+	    
+	    var FR= new FileReader();
+	    
+	    FR.addEventListener("load", function(e) {
+	      document.getElementById("img").src       = e.target.result;
+	      jQuery("#img").show();
+	      document.getElementById("signature_value").value = e.target.result;
+	    }); 
+	    
+	    FR.readAsDataURL( this.files[0] );
+	  }
+	  
+	}
+
+	document.getElementById("Signature").addEventListener("change", readFile);
 </script>
 <?php
 include( ABSPATH . 'wp-admin/admin-footer.php' );
