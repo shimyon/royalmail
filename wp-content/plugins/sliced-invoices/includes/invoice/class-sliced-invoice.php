@@ -74,7 +74,11 @@ class Sliced_Invoice {
 
 		'client'          => '_sliced_client',
 
-		'specification'          => '_sliced_specification',
+		'specification'   => '_sliced_specification',
+		
+		'the_termofshipping'   => '_sliced_the_termofshipping',
+
+		'chk_addition_display_after_item'   => 'chk_addition_display_after_item',
 
 
 
@@ -327,6 +331,22 @@ class Sliced_Invoice {
 		$description = self::get_sliced_meta( $id, self::$meta_key['specification']);
 
 		return $description;
+
+	}	
+
+	public static function get_chk_addition_display_after_item( $id = 0 ) {
+
+		$chk_addition_display_after_item = self::get_sliced_meta( $id, self::$meta_key['chk_addition_display_after_item']);
+
+		return $chk_addition_display_after_item;
+
+	}
+	
+	public static function get_the_termofshipping( $id = 0 ) {
+
+		$the_termofshipping = self::get_sliced_meta( $id, self::$meta_key['the_termofshipping']);
+
+		return $the_termofshipping;
 
 	}
 

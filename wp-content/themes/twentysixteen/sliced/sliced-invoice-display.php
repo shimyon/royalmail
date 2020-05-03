@@ -78,7 +78,7 @@ do_action( 'sliced_before_invoice_display' ); ?><!doctype html>
 
 
 
-		<!-- ///// Start PDF header -->
+		<!-- ///// Start PDF header3 -->
 
 		<htmlpageheader name="sliced-pdf-header">
 

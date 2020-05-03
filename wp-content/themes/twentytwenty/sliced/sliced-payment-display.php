@@ -19,10 +19,17 @@ ob_start();
 	<title><?php esc_html_e( sliced_get_business_name() ) ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex,nofollow">
+    <?php do_action('sliced_head'); ?>
+    <?php do_action('sliced_payment_head'); ?>
 
-	<?php do_action('sliced_head'); ?>
-	<?php do_action('sliced_payment_head'); ?>
 
+    <link rel='stylesheet' id='dashicons-css'  href='https://acc.petraarmoredvehicles.com/wp-includes/css/dashicons.min.css?ver=5.4.1' media='all' />
+    <link rel='stylesheet' id='sliced-invoices_open-sans-css'  href='https://fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=3.8.8' media='all' />
+    <link rel='stylesheet' id='sliced-invoices_fontawesome-css'  href='https://acc.petraarmoredvehicles.com/wp-content/plugins/sliced-invoices/public/css/font-awesome.min.css?ver=3.8.8' media='all' />
+    <link rel='stylesheet' id='sliced-invoices_bootstrap-css'  href='https://acc.petraarmoredvehicles.com/wp-content/plugins/sliced-invoices/public/css/bootstrap.min.css?ver=3.8.8' media='all' />
+    <link rel='stylesheet' id='sliced-invoices_style-css'  href='https://acc.petraarmoredvehicles.com/wp-content/plugins/sliced-invoices/public/css/style.css?ver=3.8.8' media='all' />
+
+            
 </head>
 
 <body class="body payment">
@@ -31,21 +38,20 @@ ob_start();
 
         <div class="row sliced-header">
             <div class="col-xs-12 col-sm-6 col-sm-offset-3 sliced-business">
-                <a target="_blank" href="<?php echo esc_url( sliced_get_business_website() ); ?>">
-                    <?php echo sliced_get_business_logo() ? '<img class="logo" src="' . esc_url( sliced_get_business_logo() ) . '">' : '<h1>' . esc_html( sliced_get_business_name() ) . '</h1>' ?>
-                </a>
+                <a target="_blank" href="https://acc.petraarmoredvehicles.com">
+                    <h1>My Blog</h1>                </a>
             </div>
         </div><!-- END row -->
 
         <div class="row sliced-upper">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                 <?php do_action( 'sliced_do_payment' ); ?>
-            </div>
+                            </div>
         </div><!-- END row -->
 
         <div class="row sliced-footer">
             <div class="col-sm-12">
-                <div class="footer-text"><?php echo sliced_get_business_footer(); ?></div>
+                <div class="footer-text"></div>
             </div>
         </div><!-- END row -->
 

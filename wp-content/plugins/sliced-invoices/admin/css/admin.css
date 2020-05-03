@@ -1152,3 +1152,7 @@ td.taxonomy-invoice_status a[href*="cancelled"], td.taxonomy-quote_status a[href
 #sliced-stripe-settings > td {
 	padding-left: 40px;
 }
+
+#menu-posts-vehicle_type, #menu-posts-brand_type, #menu-posts-year_of_make, #menu-posts-item_title {
+  display: none;
+}

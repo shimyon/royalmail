@@ -595,6 +595,10 @@
 		workOutTotals();
     })
 
+    $(document).on('click', '.clschk_term_of_shipping', function() {
+    	jQuery('.clschk_term_of_shipping').not(this).prop("checked", false);    	
+    })
+
 
 	
 	// add pre-defined items from select into the empty line item fields
@@ -692,6 +696,17 @@
 
 		}
 
+	});
+
+	
+
+	$(document).on('click', '[data-selector="_sliced_items_repeat"]', function(e) {
+		setTimeout(function() {
+			$('.clstexable_option:last').prop("checked", false);
+			$('.clsadditional_option:last').prop("checked", false);
+			$('.clsadditional_option_show:last').prop("checked", false);
+			$('.clschk_term_of_shipping:last').prop("checked", false);
+		}, 500);
 	});
 
 	

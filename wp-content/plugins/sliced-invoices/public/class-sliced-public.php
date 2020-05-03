@@ -910,7 +910,7 @@ class Sliced_Public {
 
 
 
-					</div><!-- .comments-area -->
+					</div><!-- .comments-area1 -->
 
 
 

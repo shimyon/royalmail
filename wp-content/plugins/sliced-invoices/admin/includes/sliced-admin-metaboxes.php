@@ -318,7 +318,7 @@ class Sliced_Metaboxes {
 
 		$termofshipping = new_cmb2_box( array(
 
-			'id'           => $prefix . 'the_termofshipping',
+			'id'           => $prefix . 'sel_temsofshipping',
 
 			'title'        => __( 'Terms Of Shipping / Shipping Cost', 'sliced-invoices' ),
 
@@ -338,7 +338,7 @@ class Sliced_Metaboxes {
 
 			'name' =>  __( 'Terms Of Shipping / Shipping Cost', 'sliced-invoices' ),
 
-			'id'   => 'sel_temsofshipping',
+			'id'   => $prefix . 'the_termofshipping',
 
 			'type'       => 'select',
 
@@ -352,13 +352,29 @@ class Sliced_Metaboxes {
 
 			'id'           => $prefix . 'line_items',
 
-			'title'        => __( 'Line Items', 'sliced-invoices' ),
+			'title'        => __( 'Description', 'sliced-invoices' ),
 
 			'object_types' => array( 'sliced_quote', 'sliced_invoice' ),
 
 		) );
 
 
+		$line_items->add_field(array(
+			
+			'name'        => __( 'Additional Option Display After Item', 'sliced-invoices' ),
+
+			'id'          => 'chk_addition_display_after_item',
+
+			'type'        => 'checkbox',
+
+			'default'     => $this->cmb2_set_checkbox_default_for_new_post( false ),
+
+			'attributes'  => array(
+
+				'class'       => 'clschk_addition_display_after_item',
+
+			)
+		) );
 
 
 		$line_items_group_id = $line_items->add_field( array(
@@ -606,11 +622,11 @@ class Sliced_Metaboxes {
 
 			'type'        => 'checkbox',
 
-			'default'     => $this->cmb2_set_checkbox_default_for_new_post( true ),
+			'default'     => $this->cmb2_set_checkbox_default_for_new_post( false ),
 
 			'attributes'  => array(
 
-				'class'       => 'item_taxable',
+				'class'       => 'item_taxable clstexable_option',
 
 			),
 
@@ -625,7 +641,7 @@ class Sliced_Metaboxes {
 
 			'type'        => 'checkbox',
 
-			'default'     => $this->cmb2_set_checkbox_default_for_new_post( true ),
+			'default'     => $this->cmb2_set_checkbox_default_for_new_post( false ),
 
 			'attributes'  => array(
 
@@ -643,11 +659,29 @@ class Sliced_Metaboxes {
 
 			'type'        => 'checkbox',
 
-			'default'     => $this->cmb2_set_checkbox_default_for_new_post( true ),
+			'default'     => $this->cmb2_set_checkbox_default_for_new_post( false ),
 
 			'attributes'  => array(
 
 				'class'       => 'item_taxable clsadditional_option_show',
+
+			),
+
+		) );
+
+		$line_items->add_group_field( $line_items_group_id, array(
+
+			'name'        => __( 'Terms Of Shipping', 'sliced-invoices' ),
+
+			'id'          => 'chk_term_of_shipping',
+
+			'type'        => 'checkbox',
+
+			'default'     => $this->cmb2_set_checkbox_default_for_new_post( false ),
+
+			'attributes'  => array(
+
+				'class'       => 'item_taxable clschk_term_of_shipping',
 
 			),
 

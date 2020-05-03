@@ -805,7 +805,7 @@ endif; //!IS_PROFILE_PAGE
 	    var FR= new FileReader();
 	    
 	    FR.addEventListener("load", function(e) {
-	      document.getElementById("img").src       = e.target.result;
+	      document.getElementById("img").src = e.target.result;
 	      jQuery("#img").show();
 	      document.getElementById("signature_value").value = e.target.result;
 	    }); 

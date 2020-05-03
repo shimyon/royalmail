@@ -505,18 +505,19 @@ if ( ! function_exists( 'sliced_display_line_items_new' ) ) :
 			if( !empty( $items ) && !empty( $items[0] ) ) :
 
 
-
+				$term_of_shipping = sliced_get_the_termofshipping();
+				
 				foreach ( $items[0] as $item ) {
 
 					$isAdditionOpt = isset($item["additional_option"]) ? ($item["additional_option"]  == 'on') : false;
+					$isAdditionOptShow = isset($item["additional_option_show"]) ? ($item["additional_option_show"]  == 'on') : false;
+
 
 					if ((!$isAdditionOpt && !$optAddtional) || ($isAdditionOpt && $optAddtional)) {
 					
-
-					$sno = $sno + 1;
+					$sno++;
 
 					$class = ($count % 2 == 0) ? "even" : "odd";
-
 
 
 					$vehicle_type = isset( $item["vehicle_type"] ) ? $item["vehicle_type"] : "";
@@ -531,6 +532,8 @@ if ( ! function_exists( 'sliced_display_line_items_new' ) ) :
 
 					$tax = isset( $item["tax"] ) ? $shared->get_raw_number( $item["tax"] ) : "0.00";
 
+					$is_term_of_shipping = isset($item["chk_term_of_shipping"]) ? ($item["chk_term_of_shipping"]  == 'on') : false;
+
 					$line_total = $shared->get_line_item_sub_total( $shared->get_raw_number( $qty ), $amt, $tax );
 
 					
@@ -538,14 +541,23 @@ if ( ! function_exists( 'sliced_display_line_items_new' ) ) :
 						$output .= '<tr class="row_' . $class . ' sliced-item">
 
 
-							<td class="sno">' . esc_html__( $sno ) . '</td>
+							<td class="sno">' . ( $optAddtional ? '' : esc_html__( $sno ) ) . '</td>
 
 
-							<td class="service" style="font-weight: '. esc_html__($optAddtional ? 'normal' : 'bold') . ';">' . esc_html__( isset( $item["title"] ) ? $item["title"] : "" );
+							<td class="service" style="font-weight: '. esc_html__($optAddtional ? 'normal' : 'bold') . ';">';
+					 	$output .= '<div style="' . ($isAdditionOpt ? '' : 'text-decoration:underline') . '">' . esc_html__( isset( $item["title"] ) ? $item["title"] : "" ) . '</div>';
 
 								if ( isset( $item["description"] ) && !$optAddtional) :
 
 									$output .= '<br/><span class="description">' . wpautop( wp_kses_post( $item["description"] ) ) . '</span>';
+
+								endif;
+
+								if ( $is_term_of_shipping && !empty($term_of_shipping) && !$optAddtional) :
+									$term_of_shipping = str_replace('Terms Of Shipping', '', $term_of_shipping);
+									$term_of_shipping = str_replace('Shipping Cost', '', $term_of_shipping); 
+									
+									$output .= '<br/><span class="term_of_shipping">' . $term_of_shipping . '</span>';
 
 								endif;
 
@@ -567,7 +579,157 @@ if ( ! function_exists( 'sliced_display_line_items_new' ) ) :
 							}
 
 							$output .= '<td class="total">';
-							if (!$optAddtional) {
+							if (!$optAddtional || ($optAddtional && $isAdditionOpt && $isAdditionOptShow)) {
+								$output .= esc_html__( $shared->get_formatted_currency( $line_total ) );
+							}
+							$output .= '&nbsp;</td>';
+
+
+
+						$output .='</tr>';
+
+
+
+						$count++;
+					}
+				}
+
+			endif;
+
+
+
+
+
+			$output = apply_filters( 'sliced_invoice_line_items_output', $output );
+
+
+		if ($optAddtional) {			
+			return $output;
+		}
+		else
+		{
+			echo $output;
+		}
+
+
+
+	}
+
+
+
+endif;
+
+
+
+if ( ! function_exists( 'sliced_display_line_items_new_display_with' ) ) :
+
+
+
+	function sliced_display_line_items_new_display_with($optAddtional = false) {
+
+	
+
+		$shared = new Sliced_Shared;
+
+		$translate = get_option( 'sliced_translate' );
+
+
+
+		$output = '';
+
+
+
+			$count = 0;
+
+			$sno = 0;
+
+			$items = sliced_get_invoice_line_items(); // gets quote and invoice
+			
+			if( !empty( $items ) && !empty( $items[0] ) ) :
+
+
+				$term_of_shipping = sliced_get_the_termofshipping();
+				
+				foreach ( $items[0] as $item ) {
+
+					$isAdditionOpt = isset($item["additional_option"]) ? ($item["additional_option"]  == 'on') : false;
+					$isAdditionOptShow = isset($item["additional_option_show"]) ? ($item["additional_option_show"]  == 'on') : false;
+					
+					//New changes
+					$optAddtional = $isAdditionOpt;
+
+
+					if ((!$isAdditionOpt && !$optAddtional) || ($isAdditionOpt && $optAddtional)) {
+					
+					//New changes
+					if (!$optAddtional) {
+						$sno = $sno + 1;
+					}
+
+					$class = ($count % 2 == 0) ? "even" : "odd";
+
+
+
+					$vehicle_type = isset( $item["vehicle_type"] ) ? $item["vehicle_type"] : "";
+
+					$brand_type = isset( $item["brand_type"] ) ? $item["brand_type"] : "";
+
+					$qty = isset( $item["qty"] ) ? $item["qty"] : 0;
+
+					$unit = isset( $item["unit"] ) ? $item["unit"] : 0;
+
+					$amt = isset( $item["amount"] ) ? $shared->get_raw_number( $item["amount"] ) : 0;
+
+					$tax = isset( $item["tax"] ) ? $shared->get_raw_number( $item["tax"] ) : "0.00";
+
+					$is_term_of_shipping = isset($item["chk_term_of_shipping"]) ? ($item["chk_term_of_shipping"]  == 'on') : false;
+
+					$line_total = $shared->get_line_item_sub_total( $shared->get_raw_number( $qty ), $amt, $tax );
+
+					
+
+						$output .= '<tr class="row_' . $class . ' sliced-item">
+
+
+							<td class="sno">' . ( $optAddtional ? '' : esc_html__( $sno ) ) . '</td>
+
+
+							<td class="service" style="font-weight: '. esc_html__($optAddtional ? 'normal' : 'bold') . ';">';
+					 	$output .= '<div style="' . ($isAdditionOpt ? '' : 'text-decoration:underline') . '">' . esc_html__( isset( $item["title"] ) ? $item["title"] : "" ) . '</div>';
+
+								if ( isset( $item["description"] ) && !$optAddtional) :
+
+									$output .= '<br/><span class="description">' . wpautop( wp_kses_post( $item["description"] ) ) . '</span>';
+
+								endif;
+
+								if ( $is_term_of_shipping && !empty($term_of_shipping) && !$optAddtional) :
+									$term_of_shipping = str_replace('Terms Of Shipping', '', $term_of_shipping);
+									$term_of_shipping = str_replace('Shipping Cost', '', $term_of_shipping); 
+									
+									$output .= '<br/><span class="term_of_shipping">' . $term_of_shipping . '</span>';
+
+								endif;
+
+							$output .= '</td>
+
+							<td class="qty">' . esc_html__($optAddtional ? 1 : $qty) . '</td>
+
+							<td class="unit">' . esc_html__( esc_html__($optAddtional ? 'Set' : 'Unit') ) . '</td>
+
+
+							<td class="rate">' . esc_html__( $shared->get_formatted_currency( $amt ) ) . '</td>
+
+							';
+
+							if ( sliced_hide_adjust_field() === false) {
+
+								$output .= '<td class="adjust">' . esc_html__( $tax . "%" ) . '</td>';
+
+							}
+
+							$output .= '<td class="total">';
+							if (!$optAddtional || ($optAddtional && $isAdditionOpt && $isAdditionOptShow)) {
 								$output .= esc_html__( $shared->get_formatted_currency( $line_total ) );
 							}
 							$output .= '&nbsp;</td>';
@@ -591,13 +753,13 @@ if ( ! function_exists( 'sliced_display_line_items_new' ) ) :
 			$output = apply_filters( 'sliced_invoice_line_items_output', $output );
 
 
-		if ($optAddtional) {			
-			return $output;
-		}
-		else
-		{
+		// if ($optAddtional) {			
+		// 	return $output;
+		// }
+		// else
+		// {
 			echo $output;
-		}
+		// }
 
 
 

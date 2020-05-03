@@ -588,7 +588,7 @@ if ( ! function_exists( 'sliced_get_invoice_terms' ) ) :
 
 
 
-	function sliced_get_invoice_terms( $id = 0 ) {
+	function sliced_get_invoice_terms( $id = 0 ) {		
 
 		$output = Sliced_Invoice::get_terms( $id );
 
@@ -599,7 +599,6 @@ if ( ! function_exists( 'sliced_get_invoice_terms' ) ) :
 
 
 endif;
-
 
 
 if ( ! function_exists( 'sliced_get_invoice_footer' ) ) :

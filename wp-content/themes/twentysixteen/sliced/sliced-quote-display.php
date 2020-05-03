@@ -70,7 +70,7 @@ do_action( 'sliced_before_quote_display' ); ?><!doctype html>
 
 
 
-		<!-- ///// Start PDF header -->
+		<!-- ///// Start PDF header4 -->
 
 		<htmlpageheader name="sliced-pdf-header">
 

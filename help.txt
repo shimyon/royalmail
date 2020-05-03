@@ -1,3 +1,16 @@
+magicdeal.me/wp-admin
+admin
+4@softtech
+
+-----------------------------------------------------------------------------------------------------------------------
+
+Https://mytradex.me/wp-admin
+admin
+4@softtech
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
 https://acc.petraarmoredvehicles.com/wp-admin/post-new.php?post_type=sliced_invoice
 
 ==> Invoice page
@@ -115,3 +128,32 @@ Shipping Cost [C&F]
 Shipping Cost [CIF]
 
 7) Need a master for signature, so the user who would be logged in, we need to store its credentials in rich textbox and show that value at the end of invoice, so if user A is logged in and he creates an invoice then his signature would be shown at the end of invoice. Check how this thing works in existing system.
+
+
+--------------------------------------------------------------------
+
+
+1) By defaut Taxable, Additional Option, Add in Total and Terms of Shipping checkboxes should be unchecked. Currently they are by default coming as checked.
+2) The heading "Additional Option" should be removed.
+3) 1, 2, 3 under additional option items should come as A, B, C (See if it is easy and possible, otherwise we can ignore it)
+4) There is an issue. When "Add in Total" is unchecked, it shows amount in "Total in USD" column. It should show it in "Rate in USD" column. Even when "Add in Total" is checked, it doesn't show in amount in "Rate in USD" column.
+
+The way it should work is: -
+
+If "Add in Total" is checked then show it in both "Rate in UDS" and "Total in USD" columns. And also add the amount in final total.
+
+If "Add in Total" is unchecked then it should only show the amount in "Rate in UDS" column and not add it in final total.
+
+5) Car items ka text should come Underlined
+
+6) "Total CIF Lagos", should be changed to "Total"
+
+7) Fonts Century Gotic is needed in PDF and HTML.
+
+8) Line above Terms and Condition is half, it should be full touching the end. Also, is possible have a line above total (only in total column, this is also do if it doesnt take much time else we can leave it).
+
+9) For Terms of Shipping/Shipping Cost.. for all the items which are there in that drop down only the section under [] would be shown on invoice. So if "Terms of Shipping [FOB]" is selected, then it would shown as [FOB] on Invoice.
+--------------------------------------------------------------------
+
+
+ /home/sarsofts/acc.petraarmoredvehicles.com/wp-content/plugins/sliced-invoices-pdf-email/includes/vendor/sliced-pdf/sliced-pdf.php on line 1989

@@ -923,7 +923,6 @@ class Sliced_Shared {
 	    }
 
 	    
-
 	    foreach ( $items[0] as $value ) {
 
 
@@ -932,9 +931,9 @@ class Sliced_Shared {
 
 	    	$amt = isset( $value['amount'] ) ? self::get_raw_number( $value['amount'], $id ) : 0;
 	    	
-	    	$addopt = isset( $value['additional_option'] ) ? self::get_raw_number( $value['additional_option'], $id ) : false;
+	    	$addopt = isset( $value['additional_option'] ) && $value['additional_option'] == 'on' ? true : false;
 
-	    	$addoptshow = isset( $value['additional_option_show'] ) ? self::get_raw_number( $value['additional_option_show'], $id ) : true;
+	    	$addoptshow = isset( $value['additional_option_show'] ) && $value['additional_option_show'] == 'on' ? true : false;
 
 	    	
 
