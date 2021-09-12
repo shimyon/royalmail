@@ -1,30 +1,30 @@
 <?php
 include("../lib/connection.php");
 
-	$aColumns = array( 'Id', 'Address', 'CreatedDate');
-	
+	$aColumns = array( 'Id', 'house_no','street','city','postcode','country','month','is_blocked', 'CreatedDate');
+
 	/* Indexed column (used for fast and accurate table cardinality) */
 	$sIndexColumn = "Id";
-	
+
 	/* DB table to use */
 	$sTable = "royalmail_address";
-	
+
 	/* Database connection information */
 	$gaSql['user']       = $GLOBALS['username'];
 	$gaSql['password']   = $GLOBALS['password'];
 	$gaSql['db']         = $GLOBALS['dbname'];
 	$gaSql['server']     = $GLOBALS['servername'];
-	
+
     // print_r( $gaSql);
     // exit();
-	
+
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * If you just want to use the basic configuration for DataTables with PHP server-side, there is
 	 * no need to edit below this line
 	 */
-	
-	
-	/* 
+
+
+	/*
 	 * Paging
 	 */
 	$sLimit = "";
@@ -33,8 +33,8 @@ include("../lib/connection.php");
 		$sLimit = "LIMIT ".mysqli_real_escape_string($conn, $_GET['start'] ).", ".
         mysqli_real_escape_string($conn,  $_GET['length'] );
 	}
-	
-	
+
+
 	/*
 	 * Ordering
 	 */
@@ -50,16 +50,16 @@ include("../lib/connection.php");
 				 	".mysqli_real_escape_string($conn, $_GET['sSortDir_'.$i] ) .", ";
 			}
 		}
-		
+
 		$sOrder = substr_replace( $sOrder, "", -2 );
 		if ( $sOrder == "ORDER BY" )
 		{
 			$sOrder = "";
 		}
 	}
-	
-	
-	/* 
+
+
+	/*
 	 * Filtering
 	 * NOTE this does not match the built-in DataTables filtering which does it
 	 * word by word on any field. It's possible to do here, but concerned about efficiency
@@ -77,8 +77,8 @@ include("../lib/connection.php");
 		$sWhere = substr_replace( $sWhere, "", -3 );
 		$sWhere .= ')';
 	}
-	
-	
+
+
 	/* Individual column filtering */
 	for ( $i=0 ; $i<count($aColumns) ; $i++ )
 	{
@@ -95,32 +95,32 @@ include("../lib/connection.php");
 			$sWhere .= $aColumns[$i]." LIKE '%" . mysqli_real_escape_string($conn,$_GET['search_'.$i]) . "%' ";
 		}
 	}
-	
-	
+
+
 
 	if ( isset($_GET['month']) && $_GET['month'] != "0" )
 	{
-		if (trim($sWhere) == "") 
+		if (trim($sWhere) == "")
 		{
-			$sWhere .= " WHERE Month(CreatedDate) = ${$_GET['month']} ";
+		//	$sWhere .= " WHERE Month(CreatedDate) = ${$_GET['month']} ";
 		}
-		else 
+		else
 		{
-			$sWhere .= ' AND (Month(CreatedDate) = '. $_GET['month'] . ') ';
+			$sWhere .= ' AND ( month = '.$_GET['month'].') ';
 		}
 	}
 
-	if ( isset($_GET['year']) && $_GET['year'] != "0" )
-	{
-		if (trim($sWhere) == "") 
-		{
-			$sWhere .= " WHERE YEAR(CreatedDate) = ${$_GET['year']} ";
-		}
-		else 
-		{
-			$sWhere .= ' AND (YEAR(CreatedDate) = '. $_GET['year'] . ') ';
-		}
-	}
+	// if ( isset($_GET['year']) && $_GET['year'] != "0" )
+	// {
+	// 	if (trim($sWhere) == "")
+	// 	{
+	// 		$sWhere .= " WHERE YEAR(CreatedDate) = ${$_GET['year']} ";
+	// 	}
+	// 	else
+	// 	{
+	// 		$sWhere .= ' AND (YEAR(CreatedDate) = '. $_GET['year'] . ') ';
+	// 	}
+	// }
 
 	/*
 	 * SQL queries
@@ -133,9 +133,9 @@ include("../lib/connection.php");
 		$sOrder
 		$sLimit
 	";
-	
+
 	$rResult = mysqli_query( $conn, $sQuery ) or die(mysqli_error());
-	
+
 	/* Data set length after filtering */
 	$sQuery = "
 		SELECT FOUND_ROWS()
@@ -143,7 +143,7 @@ include("../lib/connection.php");
 	$rResultFilterTotal = mysqli_query( $conn , $sQuery ) or die(mysqli_error());
 	$aResultFilterTotal = mysqli_fetch_array($rResultFilterTotal);
 	$iFilteredTotal = $aResultFilterTotal[0];
-	
+
 	/* Total data set length */
 	$sQuery = "
 		SELECT COUNT(".$sIndexColumn.")
@@ -152,8 +152,8 @@ include("../lib/connection.php");
 	$rResultTotal = mysqli_query( $conn, $sQuery ) or die(mysqli_error());
 	$aResultTotal = mysqli_fetch_array($rResultTotal);
 	$iTotal = $aResultTotal[0];
-	
-	
+
+
 	/*
 	 * Output
 	 */
@@ -166,8 +166,8 @@ include("../lib/connection.php");
     "iTotalRecords" =>$iTotal,
     "iTotalDisplayRecords" => $iFilteredTotal,
       "aaData"=>$developers_record);
-    
+
     echo json_encode($developer_data);
 
-	
+
 ?>
