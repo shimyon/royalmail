@@ -9,6 +9,72 @@
 
   <link rel="stylesheet" type="text/css" href="https://api.addressnow.co.uk/css/addressnow-2.20.min.css?key=<?php echo $GLOBALS['ADDRESSNOW_API_KEY']; ?>" />
   <script type="text/javascript" src="https://api.addressnow.co.uk/js/addressnow-2.20.min.js?key=<?php echo $GLOBALS['ADDRESSNOW_API_KEY']; ?>"></script>
+
+  <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 25px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 9px;
+      bottom: 0;
+      background-color: #3a30306b;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 0px;
+      bottom: 0px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked+.slider {
+      background-color: green;
+    }
+
+    #blacklist:checked+.slider {
+      background-color: #ea4f4f;
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -20,8 +86,8 @@
 
         <!-- general form elements -->
         <div class="card card-primary">
-          <div class="card-header">
-            <h3 class="card-title">Add Addres</h3>
+          <div class="card-header"><BR><img src="./kielderimages/kielderlogo1.png" alt="Kielder logo" width="300" height="141"><BR>
+            <h3 class="card-title"><BR></h3>
           </div>
           <!-- /.card-header -->
           <!-- form start -->
@@ -38,7 +104,33 @@
             <!-- /.card-body -->
 
             <div class="card-footer">
-              <button type="button" disabled onclick="SaveAddress()" class="btn btn-primary btnsave">Save</button>
+              <span style="margin-right:15px">Add customer to database</span>
+              <label class="switch" style="margin-right:20px">
+                <input type="checkbox" id="add_customer_to_database">
+                <span class="slider round"></span>
+              </label>
+              <span style="margin-right:15px">Blacklist customer</span>
+              <label class="switch" style="margin-right:20px">
+                <input type="checkbox" id="blacklist">
+                <span class="slider round"></span>
+              </label>
+              <span style="margin-right:15px">Assign customer month</span>
+              <select style="margin-right:15px" class="form-select" id="month">
+                <option value="">None</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+              <button type="button" disabled onclick="SaveAddress()" class="btn btn-primary btnsave">Save Entry</button>
             </div>
           </form>
         </div>
@@ -56,39 +148,78 @@
     addressNow.listen('load', function(control) {
       control.listen("populate", function(address) {
         document.getElementById("lineaddress").value = address.Label;
-        $('.btnsave').prop("disabled", false);
+
       });
     });
-    $(function() {
-      $("#address").focus(function() {
-        $('.btnsave').prop("disabled", true);
-      });
-
-      $("#address").blur(function() {
-        if ($('#lineaddress').val() == '') {
-          $('.btnsave').prop("disabled", true);
-        } else {
+    $('#add_customer_to_database').click(function() {
+      if ($('#add_customer_to_database').is(':checked')) {
+        $('#blacklist').prop("checked", false);
+        $('#month').prop("disabled", false);
+        if ($('#lineaddress').val() != '') {
           $('.btnsave').prop("disabled", false);
         }
-      })
-    })
+      } else {
+        $('.btnsave').prop("disabled", true);
+
+      }
+    });
+    $('#blacklist').click(function() {
+      if ($('#blacklist').is(':checked')) {
+        $('#add_customer_to_database').prop("checked", false);
+        if ($('#lineaddress').val() != '') {
+          $('.btnsave').prop("disabled", false);
+        }
+        $("#month").val('');
+        $('#month').prop("disabled", true);
+      } else {
+        $('.btnsave').prop("disabled", true);
+        $('#month').prop("disabled", false);
+      }
+    });
+    //  $(function() {
+    // $("#address").focus(function() {
+    //   $('.btnsave').prop("disabled", true);
+    // });
+
+
+    // $("#address").blur(function() {
+    //   if ($('#lineaddress').val() == '') {
+    //     $('.btnsave').prop("disabled", true);
+    //   } else {
+    //     $('.btnsave').prop("disabled", false);
+    //   }
+    // });
+    //})
 
     function SaveAddress() {
+      $address = $("#lineaddress").val().split("\n");
+      if ($('#blacklist').is(':checked')) {
+        $blacklist_customer = 'Yes';
+      } else {
+        $blacklist_customer = 'No';
+      }
+      var month = $('#month').val();
       $.ajax({
         url: 'api/address_action.php',
         type: "post",
         data: {
           "action": 'insert',
-          'address': $("#lineaddress").val()
+          'address': $address,
+          'blacklist_customer': $blacklist_customer,
+          'month': month
         },
         success: function(response) {
+          console.log(response);
           if (response == 'New record created successfully') {
             alert("New record created successfully.");
             $("#address, #lineaddress").val('');
             $('.btnsave').prop("disabled", true);
+            $('#add_customer_to_database').prop("checked", false);
+            $('#blacklist').prop("checked", false);
+            $("#month").val('');
             $("#address").focus();
           } else if (response.indexOf('Duplicate entry') > -1) {
-            alert("Address already exists.");
+            alert("This customer already exists in your database");
           } else {
             alert(response);
           }

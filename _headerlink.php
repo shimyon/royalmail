@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 
 <script type="text/javascript">
+    debugger
     if (location.href.indexOf("login.php") == -1) {
         if (!localStorage.getItem("username")) {
             location.replace("./login.php");
