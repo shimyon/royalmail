@@ -17,7 +17,6 @@
     <?php include('_nav.php') ?>
     <div class="content-wrapper">
       <section class="content mt-2">
-
         <!-- general form elements -->
         <div class="card card-primary">
           <div class="card-header">

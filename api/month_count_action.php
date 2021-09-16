@@ -8,7 +8,7 @@ include("../lib/connection.php");
  	$months =12;
  	$row='';
  	$data=array();
- 	for ($i=1; $i <=$months ; $i++) {
+ 	for ($i	=1; $i <=$months ; $i++) {
  		if ($i<10) {
  			$date= "0".$i;
  		}

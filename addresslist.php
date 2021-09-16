@@ -101,13 +101,14 @@
                  <div class="card">
                      <!-- /.card-header -->
                      <div class='card-header'>
+                     <button type="button"  class="btn btn-primary btnExport" style="margin-bottom:15px">Export</button>
                          <div class="row d-flex">
                              <!-- <div class="col-sm-1">
                                 <label for="year">Year</label>
                                 <select class="year" style="width:96%"><option value=""> Select</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option></select>
 
                             </div> -->
-                             <div class="col-sm-12">
+                             <div class="col-sm-12" >
                                  <div class="row d-flex months_list ">
                                      <div class="col-sm-1 months_1" data-id="01">
 
@@ -576,32 +577,7 @@
                  $year = $('.year').val();
                  $month_no = '0';
                  RefreshDatatable($month_no, $year);
-                 $.ajax({
-                     datatype: 'json',
-                     url: 'api/month_count_action.php',
-                     type: "post",
-                     data: {
-                         "action": 'months_count',
-                         "year": $year
-
-
-                     },
-                     success: function(response) {
-                         $data = JSON.parse(response);
-                         $count = $data.length;
-                         console.log($count);
-                         for (var i = 0; i <= $count; i++) {
-                             $index = i + 1;
-                             $(".months_" + $index).find("p").text($data[i]);
-                         }
-                         console.log(response);
-                     },
-                     error: function(jqXHR, textStatus, errorThrown) {
-                         debugger
-
-                         console.log(textStatus, errorThrown);
-                     }
-                 });
+                 Global.GetCommonValue($year);
              });
              default_year_results();
 
@@ -610,32 +586,7 @@
                  $month_no = '0';
                  $('.year').val($year);
                  RefreshDatatable($month_no, $year);
-                 $.ajax({
-                     datatype: 'json',
-                     url: 'api/month_count_action.php',
-                     type: "post",
-                     data: {
-                         "action": 'months_count',
-                         "year": $year
-
-
-                     },
-                     success: function(response) {
-                         $data = JSON.parse(response);
-                         $count = $data.length;
-
-                         for (var i = 0; i <= $count; i++) {
-                             $index = i + 1;
-                             $(".months_" + $index).find("p").text($data[i]);
-                         }
-                         //console.log(response);
-                     },
-                     error: function(jqXHR, textStatus, errorThrown) {
-                         debugger
-
-                         console.log(textStatus, errorThrown);
-                     }
-                 });
+                 Global.GetCommonValue($year);
              }
 
              $(".months_list img,.months_list p").click(function() {
