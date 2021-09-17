@@ -98,7 +98,14 @@
                 <input type="text" class="form-control" id="address" placeholder="Enter Address">
               </div>
               <div class="form-group">
-                <textarea class='form-control' rows="5" readonly id='lineaddress'></textarea>
+                <div class="row">
+                  <div class="col col-6">
+                    <textarea class='form-control' rows="5" readonly id='lineaddress'></textarea>
+                  </div>
+                  <div class="col col-6" id="map" style="position: relative; overflow:hidden;">
+
+                  </div>
+                </div>
               </div>
             </div>
             <!-- /.card-body -->
@@ -143,39 +150,57 @@
   </div>
   <!-- ./wrapper -->
   <?php include('_footerlink.php') ?>
-
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script>
   <script type='text/javascript'>
+    let map;
+
     addressNow.listen('load', function(control) {
       control.listen("populate", function(address) {
         document.getElementById("lineaddress").value = address.Label;
 
       });
     });
-    $('#add_customer_to_database').click(function() {
-      if ($('#add_customer_to_database').is(':checked')) {
-        $('#blacklist').prop("checked", false);
-        $('#month').prop("disabled", false);
-        if ($('#lineaddress').val() != '') {
-          $('.btnsave').prop("disabled", false);
-        }
-      } else {
-        $('.btnsave').prop("disabled", true);
 
-      }
-    });
-    $('#blacklist').click(function() {
-      if ($('#blacklist').is(':checked')) {
-        $('#add_customer_to_database').prop("checked", false);
-        if ($('#lineaddress').val() != '') {
-          $('.btnsave').prop("disabled", false);
+    $(function() {
+
+      $('#add_customer_to_database').click(function() {
+        if ($('#add_customer_to_database').is(':checked')) {
+          $('#blacklist').prop("checked", false);
+          $('#month').prop("disabled", false);
+          if ($('#lineaddress').val() != '') {
+            $('.btnsave').prop("disabled", false);
+          }
+        } else {
+          $('.btnsave').prop("disabled", true);
+
         }
-        $("#month").val('');
-        $('#month').prop("disabled", true);
-      } else {
-        $('.btnsave').prop("disabled", true);
-        $('#month').prop("disabled", false);
-      }
+      });
+
+      $('#blacklist').click(function() {
+        if ($('#blacklist').is(':checked')) {
+          $('#add_customer_to_database').prop("checked", false);
+          if ($('#lineaddress').val() != '') {
+            $('.btnsave').prop("disabled", false);
+          }
+          $("#month").val('');
+          $('#month').prop("disabled", true);
+        } else {
+          $('.btnsave').prop("disabled", true);
+          $('#month').prop("disabled", false);
+        }
+      });
+
+      // initMap();
     });
+
+    function initMap() {
+      debugger
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 2,
+        center: new google.maps.LatLng(2.8, -187.3),
+        mapTypeId: "terrain",
+      });
+    }
     //  $(function() {
     // $("#address").focus(function() {
     //   $('.btnsave').prop("disabled", true);
