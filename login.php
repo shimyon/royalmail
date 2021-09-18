@@ -54,7 +54,7 @@
             $('#email').val('');
             $('#password').val('');
             $("#btnLogin").click(function() {
-                if ($('#email').val() == '<?php echo $GLOBALS['loginuser']; ?>' && $('#password').val() == '<?php echo $GLOBALS['password']; ?>') {
+                if ($('#email').val() == '<?php echo $GLOBALS['loginuser']; ?>' && $('#password').val() == '<?php echo $GLOBALS['loginpass']; ?>') {
                     localStorage.setItem("username", $('#email').val());
                     location.replace('./');
                 }

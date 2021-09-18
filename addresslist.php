@@ -101,14 +101,14 @@
                  <div class="card">
                      <!-- /.card-header -->
                      <div class='card-header'>
-                     <button type="button"  class="btn btn-primary btnExport" style="margin-bottom:15px">Export</button>
+                         <button type="button" class="btn btn-primary btnExport" style="margin-bottom:15px" onclick='exportCsv()'>Export</button>
                          <div class="row d-flex">
                              <!-- <div class="col-sm-1">
                                 <label for="year">Year</label>
                                 <select class="year" style="width:96%"><option value=""> Select</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option></select>
 
                             </div> -->
-                             <div class="col-sm-12" >
+                             <div class="col-sm-12">
                                  <div class="row d-flex months_list ">
                                      <div class="col-sm-1 months_1" data-id="01">
 
@@ -320,8 +320,10 @@
 
          <script type='text/javascript'>
              var oTable, editId;
-             var calmonth = 0,
-                 calyear = 0;
+             var calmonth = 0;
+             var selectedMonth = "";
+
+             calyear = 0;
              // $(function() {
              //     $('.date-picker').datepicker({
              //         changeMonth: true,
@@ -593,11 +595,68 @@
 
                  $month_no = $(this).parent().attr("data-id");
                  $year = $('.year').val();
-
+                 selectedMonth = $month_no;
 
                  RefreshDatatable($month_no, $year);
 
              });
+
+             function exportCsv() {
+                 $.ajax({
+                     url: "./api/address_list_action.php",
+                     type: "get",
+                     data: {
+                         "month": selectedMonth,
+                         'export': "Y"
+                     },
+                     success: function(response) {
+
+                         var json = JSON.parse(response);
+                         if (json.length == 0) {
+                             alert("No Data Found");
+                             return;
+                         }
+                         var csv = JSON2CSV(json);
+                         var downloadLink = document.createElement("a");
+                         var blob = new Blob(["\ufeff", csv]);
+                         var url = URL.createObjectURL(blob);
+                         var csvName = selectedMonth == undefined || selectedMonth == "" ? "Data" : selectedMonth;
+                         downloadLink.href = url;
+                         downloadLink.download = csvName + ".csv";
+
+                         document.body.appendChild(downloadLink);
+                         downloadLink.click();
+                         document.body.removeChild(downloadLink);
+                     },
+                     error: function(jqXHR, textStatus, errorThrown) {
+                         alert(textStatus, errorThrown);
+                     }
+                 });
+             }
+
+
+             function JSON2CSV(objArray) {
+                 var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+                 var str = '';
+                 var line = '';
+
+                 for (var index in array[0]) {
+                     line += index + ',';
+                 }
+                 str += line + '\r\n';
+                 line = "";
+                 for (var i = 0; i < array.length; i++) {
+                     var line = '';
+
+                     for (var index in array[i]) {
+                         line += array[i][index] + ',';
+                     }
+
+                     line = line.slice(0, -1);
+                     str += line + '\r\n';
+                 }
+                 return str;
+             }
          </script>
  </body>
 

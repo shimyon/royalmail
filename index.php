@@ -100,7 +100,43 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col col-6">
-                    <textarea class='form-control' rows="5" readonly id='lineaddress'></textarea>
+                    <div class="col col-12">
+                      <textarea class='form-control' rows="5" readonly id='lineaddress'></textarea>
+                    </div>
+                    <div class="col col-12" style="margin-top:10px;">
+                      <span style="margin-right:15px">Add customer to database</span>
+                      <label class="switch" style="margin-right:20px">
+                        <input type="checkbox" id="add_customer_to_database">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                    <div class="col col-12">
+                      <span style="margin-right:15px">Blacklist customer</span>
+                      <label class="switch" style="margin-right:20px">
+                        <input type="checkbox" id="blacklist">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                    <div class="col col-12">
+                      <span style="margin-right:15px">Assign customer month</span>
+                      <select style="margin-right:15px" class="form-select" id="month">
+                        <option value="">None</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                      </select>
+                    </div>
+                    <button type="button" style="margin-top:10px;" disabled onclick="SaveAddress()" class="btn btn-primary btnsave">Save Entry</button>
+
                   </div>
                   <div class="col col-6" id="map" style="position: relative; overflow:hidden;">
 
@@ -110,35 +146,6 @@
             </div>
             <!-- /.card-body -->
 
-            <div class="card-footer">
-              <span style="margin-right:15px">Add customer to database</span>
-              <label class="switch" style="margin-right:20px">
-                <input type="checkbox" id="add_customer_to_database">
-                <span class="slider round"></span>
-              </label>
-              <span style="margin-right:15px">Blacklist customer</span>
-              <label class="switch" style="margin-right:20px">
-                <input type="checkbox" id="blacklist">
-                <span class="slider round"></span>
-              </label>
-              <span style="margin-right:15px">Assign customer month</span>
-              <select style="margin-right:15px" class="form-select" id="month">
-                <option value="">None</option>
-                <option value="01">January</option>
-                <option value="02">February</option>
-                <option value="03">March</option>
-                <option value="04">April</option>
-                <option value="05">May</option>
-                <option value="06">June</option>
-                <option value="07">July</option>
-                <option value="08">August</option>
-                <option value="09">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </select>
-              <button type="button" disabled onclick="SaveAddress()" class="btn btn-primary btnsave">Save Entry</button>
-            </div>
           </form>
         </div>
         <!-- /.card -->
@@ -152,12 +159,27 @@
   <?php include('_footerlink.php') ?>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script>
   <script type='text/javascript'>
-    let map;
+    var geocoder;
+    var map;
+    var googleAddress = "Delhi, India";
+
+    function initMap() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: {
+          lat: -34.397,
+          lng: 150.644
+        }
+      });
+      geocoder = new google.maps.Geocoder();
+      codeAddress(geocoder, map);
+    }
 
     addressNow.listen('load', function(control) {
       control.listen("populate", function(address) {
         document.getElementById("lineaddress").value = address.Label;
-
+        googleAddress = address.Label;
+        initMap();
       });
     });
 
@@ -193,14 +215,6 @@
       // initMap();
     });
 
-    function initMap() {
-      debugger
-      map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 2,
-        center: new google.maps.LatLng(2.8, -187.3),
-        mapTypeId: "terrain",
-      });
-    }
     //  $(function() {
     // $("#address").focus(function() {
     //   $('.btnsave').prop("disabled", true);
@@ -252,6 +266,23 @@
         error: function(jqXHR, textStatus, errorThrown) {
           debugger
           console.log(textStatus, errorThrown);
+        }
+      });
+    }
+
+    function codeAddress(geocoder, map) {
+
+      geocoder.geocode({
+        'address': googleAddress
+      }, function(results, status) {
+        if (status === 'OK') {
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+          });
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
         }
       });
     }
