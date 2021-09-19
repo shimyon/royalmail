@@ -161,7 +161,7 @@
   <script type='text/javascript'>
     var geocoder;
     var map;
-    var googleAddress = "Delhi, India";
+    var googleAddress = "northumerland";
 
     function initMap() {
       var map = new google.maps.Map(document.getElementById('map'), {

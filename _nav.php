@@ -11,10 +11,10 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
+      <li class="nav-item exportbtn d-none d-sm-inline-block">
         <a href="./" class="nav-link">New Customer</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
+      <li class="nav-item exportbtn d-none d-sm-inline-block">
         <a href="addresslist.php" class="nav-link">Customers</a>
       </li>
     </ul>
@@ -66,73 +66,72 @@
               <i class="fas fa-angle-left right"></i>
             </a>
             <ul class="nav nav-treeview">
-              <li id="01" class="nav-item months_1">
+              <li id="01" class="nav-item exportbtn months_1" data-month='1'>
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-plus"></i>
                   <span>Janurary</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="02" class="nav-item months_2">
+              <li id="02" class="nav-item exportbtn months_2" data-month='2'>
                 <a href="#" class="nav-link">
                   <span>February</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="03" class="nav-item months_3">
+              <li id="03" class="nav-item exportbtn months_3" data-month='3'>
                 <a href="#" class="nav-link">
                   <span>March</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="04" class="nav-item months_4">
+              <li id="04" class="nav-item exportbtn months_4" data-month='4'>
                 <a href="#" class="nav-link">
                   <span>April</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="05" class="nav-item months_5">
+              <li id="05" class="nav-item exportbtn months_5" data-month='5'>
                 <a href="#" class="nav-link">
                   <span>May</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="06" class="nav-item months_6">
+              <li id="06" class="nav-item exportbtn months_6" data-month='6'>
                 <a href="#" class="nav-link">
                   <span>June</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="07" class="nav-item months_7">
+              <li id="07" class="nav-item exportbtn months_7" data-month='7'>
                 <a href="#" class="nav-link">
                   <span>July</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="08" class="nav-item months_8">
+              <li id="08" class="nav-item exportbtn months_8" data-month='8'>
                 <a href="#" class="nav-link">
                   <span>August</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="09" class="nav-item months_9">
+              <li id="09" class="nav-item exportbtn months_9" data-month='9'>
                 <a href="#" class="nav-link">
                   <span>September</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="10" class="nav-item months_10">
+              <li id="10" class="nav-item exportbtn months_10" data-month='10'>
                 <a href="#" class="nav-link">
                   <span>Octomber</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="11" class="nav-item months_11">
+              <li id="11" class="nav-item exportbtn months_11" data-month='11'>
                 <a href="#" class="nav-link">
                   <span>November</span> (<p> 0</p>)
                 </a>
               </li>
-              <li id="12" class="nav-item months_12">
+              <li id="12" class="nav-item exportbtn months_12" data-month='1' data-month='12'>
                 <a href="#" class="nav-link">
                   <span>December</span> (<p> 0</p>)
                 </a>
               </li>
-              <li class="nav-item blocklist">
+              <li class="nav-item exportbtn blocklist" data-month='13'>
                 <a href="#" class="nav-link">
                   <span>BlackList</span> (<p> 0</p>)
                 </a>
               </li>
-              <li class="nav-item unassign">
+              <li class="nav-item exportbtn unassign" data-month='14'>
                 <a href="#" class="nav-link">
                   <span>Unassigned</span> (<p> 0</p>)
                 </a>

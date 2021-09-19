@@ -110,13 +110,14 @@ if (isset($_GET['month']) && $_GET['month'] != "0" && $_GET['month'] != "") {
 	 * Get data to display
 	 */
 $sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS " . str_replace(" , ", " ", implode(", ", $aColumns)) . "
+		SELECT SQL_CALC_FOUND_ROWS ifnull(MONTHNAME(STR_TO_DATE(month, '%m')), '') AS month_name, " . str_replace(" , ", " ", implode(", ", $aColumns)) . "
 		FROM   $sTable
 		$sWhere
 		$sOrder
 		$sLimit
 	";
 
+// exit($sQuery);
 $rResult = mysqli_query($conn, $sQuery) or die(mysqli_error());
 
 /* Data set length after filtering */
