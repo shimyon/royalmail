@@ -286,9 +286,9 @@
     }
 
     function codeAddress(geocoder, map) {
-
+      let add = googleAddress.replace(/\n/g,'+');
       geocoder.geocode({
-        'address': googleAddress
+        'address': add
       }, function(results, status) {
         if (status === 'OK') {
           if (results.length > 0) {
@@ -298,6 +298,13 @@
               lng: loc.lng()
             };
             map.setPosition(astorPlace);
+            // var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+            // var mapOptions = {
+            //   zoom: 8,
+            //   center: latlng
+            // };
+            // map.setOptions(mapOptions);
+            map.setZoom(8);
 
             // map.setCenter(results[0].geometry.location);
             // var marker = new google.maps.Marker({
