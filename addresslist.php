@@ -16,20 +16,20 @@
         .ui-datepicker-calendar {
             display: none;
         }
-        
+
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 25px;
         }
-        
+
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-        
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -41,7 +41,7 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-        
+
         .slider:before {
             position: absolute;
             content: "";
@@ -53,34 +53,39 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-        
+
         #blacklist:checked+.slider {
             background-color: #ea4f4f;
         }
-        
+
+        .newcheckbox:checked+.slider {
+            background-color: #ea4f4f;
+        }
+
         input:focus+.slider {
             box-shadow: 0 0 1px #2196F3;
         }
-        
+
         input:checked+.slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
+
         /* Rounded sliders */
-        
+
         .slider.round {
             border-radius: 34px;
         }
-        
+
         .slider.round:before {
             border-radius: 50%;
         }
-        
+
         .months_list img {
             cursor: pointer;
         }
-        
+
         .months_list p {
             cursor: pointer;
             font-size: 22px;
@@ -212,8 +217,8 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Your Address Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                     </button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form>
@@ -261,29 +266,29 @@
                                     <label for="month">Month</label>
                                     <div class="col">
                                         <select class="form-control" id="month">
-                                             <option value="">None</option>
-                                             <option value="01">January</option>
-                                             <option value="02">February</option>
-                                             <option value="03">March</option>
-                                             <option value="04">April</option>
-                                             <option value="05">May</option>
-                                             <option value="06">June</option>
-                                             <option value="07">July</option>
-                                             <option value="08">August</option>
-                                             <option value="09">September</option>
-                                             <option value="10">October</option>
-                                             <option value="11">November</option>
-                                             <option value="12">December</option>
-                                         </select>
+                                            <option value="">None</option>
+                                            <option value="01">January</option>
+                                            <option value="02">February</option>
+                                            <option value="03">March</option>
+                                            <option value="04">April</option>
+                                            <option value="05">May</option>
+                                            <option value="06">June</option>
+                                            <option value="07">July</option>
+                                            <option value="08">August</option>
+                                            <option value="09">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-sm-12">
                                     <label style="margin-right:15px">Blacklist customer</label>
                                     <label class="switch" style="margin-right:20px">
-                                         <input type="checkbox" id="blacklist">
-                                         <span class="slider round"></span>
-                                     </label>
+                                        <input type="checkbox" id="blacklist">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
 
                             </div>
@@ -294,13 +299,13 @@
                                     <label for="month">Appliance</label>
                                     <div class="col">
                                         <select class="form-control" id="appliance">
-                                                <option value="">None</option>
-                                                <option value="1">Stove</option>
-                                                <option value="2">Fire</option>
-                                                <option value="3">Rayburn</option>
-                                                <option value="4">Aga</option>
-                                                <option value="5">Other</option>
-                                            </select>
+                                            <option value="">None</option>
+                                            <option value="1">Stove</option>
+                                            <option value="2">Fire</option>
+                                            <option value="3">Rayburn</option>
+                                            <option value="4">Aga</option>
+                                            <option value="5">Other</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -308,30 +313,30 @@
                                     <label for="month">Location</label>
                                     <div class="col">
                                         <select class="form-control" id="location">
-                                                <option value="">None</option>
-                                                <option value="1">Living room</option>
-                                                <option value="2">Dinning room</option>
-                                                <option value="3">Bedroom</option>
-                                                <option value="4">Boot room</option>
-                                                <option value="5">Kitchen</option>
-                                                <option value="6">Study</option>
-                                            </select>
+                                            <option value="">None</option>
+                                            <option value="1">Living room</option>
+                                            <option value="2">Dinning room</option>
+                                            <option value="3">Bedroom</option>
+                                            <option value="4">Boot room</option>
+                                            <option value="5">Kitchen</option>
+                                            <option value="6">Study</option>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-sm-3">
                                     <label style="margin-right:15px">Cowl</label>
                                     <label class="switch" style="margin-right:20px">
-                                            <input type="checkbox" id="cowl">
-                                            <span class="slider round"></span>
-                                        </label>
+                                        <input type="checkbox" id="cowl" class="newcheckbox">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label style="margin-right:15px">Lined</label>
                                     <label class="switch" style="margin-right:20px">
-                                            <input type="checkbox" id="lined">
-                                            <span class="slider round"></span>
-                                        </label>
+                                        <input type="checkbox" id="lined" class="newcheckbox">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <button class='btn btn-primary' type="button" onclick="AddAppliance()" style="margin-right:15px; margin-top:15px;">Add Appliance</button>
@@ -345,15 +350,10 @@
                                                 <th>Location</th>
                                                 <th>Cowl</th>
                                                 <th>Lined</th>
+                                                <th>&nbsp;</th>
                                             </tr>
                                         </thead>
                                         <tbody id='appliance_list'>
-                                            <tr>
-                                                <td>Appliance</td>
-                                                <td>Location</td>
-                                                <td>Cowl</td>
-                                                <td>Lined</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -432,6 +432,7 @@
 
             function AddAppliance() {
                 let data = {
+                    "id": 0,
                     "Appliance": $("#appliance option:selected").text(),
                     "Location": $("#location option:selected").text(),
                     "Cowl": $("#cowl").is(":checked") ? "Yes" : "No",
@@ -447,9 +448,41 @@
                     <td class='tdLocation'>${data.Location}</td>
                     <td class='tdCowl'>${data.Cowl}</td>
                     <td class='tdLined'>${data.Lined}</td>
+                    <td class='tdLined'>
+                        <button type='button' class='btn btn-xs btn-danger btndelete'  onclick="remoteAppliance(this);" data-id='${data.id}' title='delete'>
+                            <i class='fa fa-trash'></i>
+                        </button>
+                    </td>
                 </tr>
                 `);
             }
+
+            function remoteAppliance(btnOpt) {
+                let RemoveId = $(btnOpt).attr('data-id');
+                if (!confirm("Are you sure?")) {
+                    return;
+                }
+                if (RemoveId == "0") {
+                    $(btnOpt).closest("tr").remove();
+                }
+                $.ajax({
+                    url: 'api/address_action.php',
+                    datatype: 'json',
+                    type: "post",
+                    data: {
+                        "action": 'deleteAppliance',
+                        'id': RemoveId
+                    },
+                    success: function(response) {
+                        $(btnOpt).closest("tr").remove();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("Something went wrong!");
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
+
 
             function CallDatatable($month, $year) {
 
@@ -600,25 +633,6 @@
                 });
             }
 
-            function remoteAppliance(RemoveId) {
-                $.ajax({
-                    url: 'api/month_count_action.php',
-                    datatype: 'json',
-                    type: "post",
-                    data: {
-                        "action": 'deleteAppliance',
-                        'id': RemoveId
-                    },
-                    success: function(response) {
-                        debugger
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        debugger
-                        console.log(textStatus, errorThrown);
-                    }
-                });
-            }
-
             function AfterDrawTable() {
                 var that = this;
                 $('.btnedit').click(function() {
@@ -659,6 +673,7 @@
                             let res = JSON.parse(response);
                             res.forEach(f => {
                                 let data = {
+                                    "id": f.Id,
                                     "Appliance": f.appliance_name,
                                     "Location": f.location,
                                     "Cowl": f.cowl,

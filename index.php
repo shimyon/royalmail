@@ -162,6 +162,7 @@
     var geocoder;
     var map;
     var googleAddress = "northumerland";
+    var addressSelect = {};
 
     function initMap() {
       // var map = new google.maps.Map(document.getElementById('map'), {
@@ -192,6 +193,7 @@
 
     addressNow.listen('load', function(control) {
       control.listen("populate", function(address) {
+        addressSelect = address;
         document.getElementById("lineaddress").value = address.Label;
         googleAddress = address.Label;
         initMap();
@@ -246,7 +248,14 @@
     //})
 
     function SaveAddress() {
-      $address = $("#lineaddress").val().split("\n");
+      let address = ['', '', '', '', ''];
+      let $address = $("#lineaddress").val().split("\n");
+      address[0] = $address[0];
+      address[1] = $address[1];
+      address[2] = addressSelect.City; //city
+      address[3] = addressSelect.PostalCode; //postcode
+      address[4] = addressSelect.CountryName; //country
+
       if ($('#blacklist').is(':checked')) {
         $blacklist_customer = 'Yes';
       } else {
@@ -258,7 +267,7 @@
         type: "post",
         data: {
           "action": 'insert',
-          'address': $address,
+          'address': address,
           'blacklist_customer': $blacklist_customer,
           'month': month
         },
@@ -279,14 +288,13 @@
           }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-          debugger
           console.log(textStatus, errorThrown);
         }
       });
     }
 
     function codeAddress(geocoder, map) {
-      let add = googleAddress.replace(/\n/g,'+');
+      let add = googleAddress.replace(/\n/g, '+');
       geocoder.geocode({
         'address': add
       }, function(results, status) {
