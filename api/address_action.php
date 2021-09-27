@@ -2,6 +2,34 @@
 
 include("../lib/connection.php");
 
+if ($_POST['action'] == "getAppliance") {
+  $arr = array();
+	$addressid = mysqli_real_escape_string($conn, $_POST['addressid']);
+  $sql = "select Id, AddressId, appliance_name, location, if(cowl = 1,'Yes','No') as cowl, if(lined = 1,'Yes','No') as lined from royalmail_appliance where AddressId = $addressid";
+  $sql_result=$conn->query($sql);
+  if($sql_result->num_rows>0)
+  {
+    while($row = $sql_result->fetch_assoc())
+    {
+      $arr[] = $row;
+    }
+  }
+  echo json_encode($arr);
+}
+
+if ($_POST['action'] == "deleteAppliance") {
+  $id = mysqli_real_escape_string($conn, $_POST['id']);
+  $sql = "delete from royalmail_appliance where Id = $id";
+  $sql_result=$conn->query($sql);
+
+	if ($conn->query($sql) === TRUE) {
+    echo "Record delete successfully";
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+
+}
+
 if ($_POST['action'] == "insert") {
 	$address =  $_POST['address'];
 	$blacklist_customer =  $_POST['blacklist_customer'];
@@ -49,22 +77,33 @@ if ($_POST['action'] == "edit") {
 	$postcode = mysqli_real_escape_string($conn, $_POST['postcode']);
 	$month = mysqli_real_escape_string($conn, $_POST['month']);
 	$blacklist = mysqli_real_escape_string($conn, $_POST['blacklist']);
+  $data = $_POST['appliance'];
 
 	$id = mysqli_real_escape_string($conn, $_POST['id']);
 
 	$sql = "update royalmail_address set house_no = '".$houseno."',street='".$street."',city='".$city."',postcode='".$postcode."',month = '".$month."', is_blocked='".$blacklist."' where ID = $id";
 
-
-
 	if ($conn->query($sql) === TRUE) {
+    $sql = "delete from royalmail_appliance where AddressId = $id";
+    $conn->query($sql);
+    foreach ($data as $d) {
+      $appliance_name = mysqli_real_escape_string($conn, $d['appliance_name']) ?? "";
+      $location = mysqli_real_escape_string($conn, $d['location']) ?? "";
+      $cowl = mysqli_real_escape_string($conn, $d['cowl']) == "Yes" ? "1" : "0";
+      $lined = mysqli_real_escape_string($conn, $d['lined']) == "Yes" ? "1" : "0";
+      $sql = "INSERT INTO royalmail_appliance (AddressId,appliance_name,location,cowl,lined)
+              VALUES ('" . $id ."', '" . $appliance_name . "','" . $location . "','" . $cowl . "','" . $lined . "')";
+      $conn->query($sql);
+    }
+   
+     
+    echo "Record udpated successfully";
 
-        echo "Record udpated successfully";
+  } else {
 
-	} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
 
-	    echo "Error: " . $sql . "<br>" . $conn->error;
-
-	}
+  }
 
 }
 
