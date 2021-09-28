@@ -16,20 +16,20 @@
         .ui-datepicker-calendar {
             display: none;
         }
-        
+
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 25px;
         }
-        
+
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-        
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -41,7 +41,7 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-        
+
         .slider:before {
             position: absolute;
             content: "";
@@ -53,38 +53,39 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-        
+
         #blacklist:checked+.slider {
             background-color: #ea4f4f;
         }
-        
+
         .newcheckbox:checked+.slider {
             background-color: #218838;
         }
-        
+
         input:focus+.slider {
             box-shadow: 0 0 1px #2196F3;
         }
-        
+
         input:checked+.slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
+
         /* Rounded sliders */
-        
+
         .slider.round {
             border-radius: 34px;
         }
-        
+
         .slider.round:before {
             border-radius: 50%;
         }
-        
+
         .months_list img {
             cursor: pointer;
         }
-        
+
         .months_list p {
             cursor: pointer;
             font-size: 22px;
@@ -197,7 +198,7 @@
                         <div style="margin-top:15px;">
                             <h6 style="font-size:18px;">*Note</h6>
                             <p style="font-size:15px;margin-bottom: 5px;">Red colour indicates customer is blocked</p>
-                            <p style="font-size:15px;margin-bottom:5px;">Grey colour indicates month is not assigned</p>
+                            <p style="font-size:15px;margin-bottom:5px;">Light blue colour indicates month is assigned</p>
                         </div>
 
                     </div>
@@ -211,7 +212,7 @@
     <!-- ./wrapper -->
 
     <div class="modal" id='myModal' tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Your Address Details</h5>
@@ -364,7 +365,10 @@
 
                         <div class="card-body" id="third-tab">
                             <div class="row d-flex">
-                                <div class="col-sm-12">
+                                <div class="col-sm-6">
+                                    <div id="addressconfirm">
+
+                                    </div>
                                     <table class='table'>
                                         <thead>
                                             <tr>
@@ -377,6 +381,8 @@
                                         <tbody id='appliance_list_view'>
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="col-sm-6" id="map" style="position: relative; overflow:hidden; min-height: 300px; min-width: 300px;">
                                 </div>
                             </div>
                         </div>
@@ -409,13 +415,15 @@
         <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script>
 
         <script type='text/javascript'>
             var oTable, editId;
             var calmonth = 0;
             var selectedMonth = "";
-
-            calyear = 0;
+            var calyear = 0;
+            var geocoder;
+            var map;
             // $(function() {
             //     $('.date-picker').datepicker({
             //         changeMonth: true,
@@ -431,14 +439,121 @@
             //     });
             //     RefreshDatatable();
             // })
-            $('#blacklist').click(function() {
-                if ($('#blacklist').is(':checked')) {
-                    $("#month").val('');
-                    $('#month').prop("disabled", true);
-                } else {
-                    $('#month').prop("disabled", false);
-                }
-            });
+            $(function() {
+                $('#blacklist').click(function() {
+                    if ($('#blacklist').is(':checked')) {
+                        $("#month").val('');
+                        $('#month').prop("disabled", true);
+                    } else {
+                        $('#month').prop("disabled", false);
+                    }
+                });
+
+
+                $(".months_list img,.months_list p").click(function() {
+
+                    $month_no = $(this).parent().attr("data-id");
+                    $year = $('.year').val();
+                    selectedMonth = $month_no;
+
+                    RefreshDatatable($month_no, $year);
+
+                });
+                $('.year').change(function() {
+                    $year = $('.year').val();
+                    $month_no = '0';
+                    RefreshDatatable($month_no, $year);
+                    Global.GetCommonValue($year);
+                });
+                default_year_results();
+            })
+
+            function initMap() {
+                // var mapOptions = {
+                //     center: new google.maps.LatLng(42.345573, -71.098326),
+                //     zoom: 2,
+                //     mapTypeId: google.maps.MapTypeId.ROADMAP
+                // };
+                // map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+                map = new google.maps.StreetViewPanorama(
+                    document.getElementById("map"), {
+                        position: {
+                            lat: 42.345573,
+                            lng: -71.098326
+                        },
+                        addressControlOptions: {
+                            position: google.maps.ControlPosition.BOTTOM_CENTER,
+                        },
+                        linksControl: false,
+                        panControl: false,
+                        enableCloseButton: false,
+                    }
+                );
+                geocoder = new google.maps.Geocoder();
+            }
+
+            function codeAddress() {
+                let googleAddress = $('#houseno').val();
+                googleAddress += ",+" + $('#street').val();
+                googleAddress += ",+" + $('#city').val();
+                googleAddress += ",+" + $('#postcode').val();
+                googleAddress += ",+" + $('#country').val();
+                // let add = googleAddress.replace(/\n/g, ',+');
+                googleAddress = googleAddress.replace(/ /g, '+');
+                geocoder.geocode({
+                    'address': googleAddress
+                }, function(results, status) {
+                    if (status === 'OK') {
+                        if (results.length > 0) {
+                            let loc = results[0].geometry.location;
+                            let astorPlace = {
+                                lat: loc.lat(),
+                                lng: loc.lng()
+                            };
+                            var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                            var mapOptions = {
+                                zoom: 1,
+                                center: latlng
+                            };
+                            map.setOptions(mapOptions);
+                            map.setPosition(astorPlace);
+
+
+                            google.maps.event.trigger(map, 'resize');
+                        }
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
+
+            function ShowConfirmTab() {
+                codeAddress();
+                let googleAddress = $('#houseno').val();
+                googleAddress += "<br>" + $('#street').val();
+                googleAddress += "<br>" + $('#city').val();
+                googleAddress += "<br>" + $('#postcode').val();
+                googleAddress += "<br>" + $('#country').val();
+                $("#addressconfirm").html(googleAddress);
+                $('#appliance_list_view tr').remove();
+                $("#appliance_list tr").each(function() {
+                    let appdata = {};
+                    appdata.appliance_name = $(".tdAppliance", this).text();
+                    appdata.location = $(".tdLocation", this).text();
+                    appdata.cowl = $(".tdCowl", this).text();
+                    appdata.lined = $(".tdLined", this).text();
+
+                    $('#appliance_list_view').append(`
+                        <tr>
+                            <td class='tdAppliance'>${appdata.appliance_name}</td>
+                            <td class='tdLocation'>${appdata.location}</td>
+                            <td class='tdCowl'>${appdata.cowl}</td>
+                            <td class='tdLined'>${appdata.lined}</td>
+                        </tr>
+                    `);
+                });
+            }
 
             function FirstTab() {
                 $("#appliance_list,#appliance_list_view").empty();
@@ -463,6 +578,9 @@
                     $("#btnsave").show();
                     $("#btnprev").show();
                     $("#third-tab").show();
+                    setTimeout(() => {
+                        ShowConfirmTab();
+                    }, 500);
                 } else {
                     $("#btnnext").show();
                     $("#btnprev").show();
@@ -523,14 +641,7 @@
                 </tr>
                 `);
 
-                $('#appliance_list_view').append(`
-                <tr>
-                    <td class='tdAppliance'>${data.Appliance}</td>
-                    <td class='tdLocation'>${data.Location}</td>
-                    <td class='tdCowl'>${data.Cowl}</td>
-                    <td class='tdLined'>${data.Lined}</td>
-                </tr>
-                `);
+
             }
 
             function remoteAppliance(btnOpt) {
@@ -636,9 +747,9 @@
                         if (aData.is_blocked == "Yes") {
                             $('td', nRow).css('background-color', 'rgb(252 125 125)');
                         } else if (aData.month == "") {
-                            $('td', nRow).css('background-color', '#dbcfcf');
-                        } else {
                             $('td', nRow).css('background-color', '');
+                        } else {
+                            $('td', nRow).css('background-color', 'lightblue');
                         }
                     }
                 });
@@ -813,13 +924,8 @@
                 });
             }
 
-            $('.year').change(function() {
-                $year = $('.year').val();
-                $month_no = '0';
-                RefreshDatatable($month_no, $year);
-                Global.GetCommonValue($year);
-            });
-            default_year_results();
+
+
 
             function default_year_results() {
                 $year = new Date().getFullYear();
@@ -829,17 +935,11 @@
                 Global.GetCommonValue($year);
             }
 
-            $(".months_list img,.months_list p").click(function() {
-
-                $month_no = $(this).parent().attr("data-id");
-                $year = $('.year').val();
-                selectedMonth = $month_no;
-
-                RefreshDatatable($month_no, $year);
-
-            });
-
             function exportCsv() {
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                const monthName = monthNames[parseInt(selectedMonth)];
                 $.ajax({
                     url: "./api/address_list_action.php",
                     type: "get",
@@ -858,7 +958,7 @@
                         var downloadLink = document.createElement("a");
                         var blob = new Blob(["\ufeff", csv]);
                         var url = URL.createObjectURL(blob);
-                        var csvName = selectedMonth == undefined || selectedMonth == "" ? "Data" : selectedMonth;
+                        var csvName = monthName == undefined || monthName == "" ? "Data" : monthName;
                         downloadLink.href = url;
                         downloadLink.download = csvName + ".csv";
 

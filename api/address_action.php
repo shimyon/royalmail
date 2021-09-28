@@ -4,13 +4,11 @@ include("../lib/connection.php");
 
 if ($_POST['action'] == "getAppliance") {
   $arr = array();
-	$addressid = mysqli_real_escape_string($conn, $_POST['addressid']);
+  $addressid = mysqli_real_escape_string($conn, $_POST['addressid']);
   $sql = "select Id, AddressId, appliance_name, location, if(cowl = 1,'Yes','No') as cowl, if(lined = 1,'Yes','No') as lined from royalmail_appliance where AddressId = $addressid";
-  $sql_result=$conn->query($sql);
-  if($sql_result->num_rows>0)
-  {
-    while($row = $sql_result->fetch_assoc())
-    {
+  $sql_result = $conn->query($sql);
+  if ($sql_result->num_rows > 0) {
+    while ($row = $sql_result->fetch_assoc()) {
       $arr[] = $row;
     }
   }
@@ -20,155 +18,147 @@ if ($_POST['action'] == "getAppliance") {
 if ($_POST['action'] == "deleteAppliance") {
   $id = mysqli_real_escape_string($conn, $_POST['id']);
   $sql = "delete from royalmail_appliance where Id = $id";
-  $sql_result=$conn->query($sql);
+  $sql_result = $conn->query($sql);
 
-	if ($conn->query($sql) === TRUE) {
+  if ($conn->query($sql) === TRUE) {
     echo "Record delete successfully";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
-
 }
 
 if ($_POST['action'] == "insert") {
-	$address =  $_POST['address'];
-	$blacklist_customer =  $_POST['blacklist_customer'];
-	$month =  $_POST['month'];
-  $result_exist = "SELECT house_no,street,city,postcode,country,month,is_blocked,month,is_blocked FROM `royalmail_address` WHERE house_no='".$address[0]."'AND street='".$address[1]."'AND city='".$address[2]."'AND postcode='".$address[3]."'AND country='".$address[4]."'";
-  $sql_result=$conn->query($result_exist);
-  if($sql_result->num_rows>0)
-  {
-    while($row = $sql_result->fetch_assoc())
-    {
+  $address =  $_POST['address'];
+  $blacklist_customer =  $_POST['blacklist_customer'];
+  $month =  $_POST['month'];
+  $result_exist = "SELECT house_no,street,city,postcode,country,month,is_blocked,month,is_blocked FROM `royalmail_address` WHERE house_no='" . $address[0] . "'AND street='" . $address[1] . "'AND city='" . $address[2] . "'AND postcode='" . $address[3] . "'AND country='" . $address[4] . "'";
+  $sql_result = $conn->query($result_exist);
+  if ($sql_result->num_rows > 0) {
+    while ($row = $sql_result->fetch_assoc()) {
       $customer_month = $row['month'];
       $customer_is_blocked = $row['is_blocked'];
     }
-    if($customer_month == ""){
+    if ($customer_month == "") {
       $month_message = "and customer is not assigned to any month";
-    }else{
-			$month_name = get_month_name($customer_month);
-      $month_message = "and assigned month is ".$month_name;
+    } else {
+      $month_name = get_month_name($customer_month);
+      $month_message = "and assigned month is " . $month_name;
     }
-    if($customer_is_blocked == "Yes"){
+    if ($customer_is_blocked == "Yes") {
       $blocked_message = " and this customer is blocked";
-    }else{
+    } else {
       $blocked_message = "";
     }
-    echo "This customer already exists in your database $month_message".$blocked_message;
+    echo "This customer already exists in your database $month_message" . $blocked_message;
     die();
-  }else{
-    $sql = "INSERT INTO royalmail_address (house_no,street,city,postcode,country,month,is_blocked) VALUES ('".$address[0]."','".$address[1]."','".$address[2]."','".$address[3]."','".$address[4]."','".$month."','".$blacklist_customer."')";
+  } else {
+    $sql = "INSERT INTO royalmail_address (house_no,street,city,postcode,country,month,is_blocked) VALUES ('" . $address[0] . "','" . $address[1] . "','" . $address[2] . "','" . $address[3] . "','" . $address[4] . "','" . $month . "','" . $blacklist_customer . "')";
   }
-	if ($conn->query($sql) === TRUE) {
-        echo "New record created successfully";
-	} else {
+  if ($conn->query($sql) === TRUE) {
+    echo "New record created successfully";
+  } else {
 
-	    echo "Error: " . $sql . "<br>" . $conn->error;
-	}
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
 }
 
 
 
 if ($_POST['action'] == "edit") {
 
-	$houseno = mysqli_real_escape_string($conn, $_POST['houseno']);
-	$street = mysqli_real_escape_string($conn, $_POST['street']);
-	$city = mysqli_real_escape_string($conn, $_POST['city']);
-	$postcode = mysqli_real_escape_string($conn, $_POST['postcode']);
-	$month = mysqli_real_escape_string($conn, $_POST['month']);
-	$blacklist = mysqli_real_escape_string($conn, $_POST['blacklist']);
-  $data = $_POST['appliance'];
+  $houseno = mysqli_real_escape_string($conn, $_POST['houseno']);
+  $street = mysqli_real_escape_string($conn, $_POST['street']);
+  $city = mysqli_real_escape_string($conn, $_POST['city']);
+  $postcode = mysqli_real_escape_string($conn, $_POST['postcode']);
+  $month = mysqli_real_escape_string($conn, $_POST['month']);
+  $blacklist = mysqli_real_escape_string($conn, $_POST['blacklist']);
+  $data = $_POST['appliance'] ?? array();
 
-	$id = mysqli_real_escape_string($conn, $_POST['id']);
+  $id = mysqli_real_escape_string($conn, $_POST['id']);
 
-	$sql = "update royalmail_address set house_no = '".$houseno."',street='".$street."',city='".$city."',postcode='".$postcode."',month = '".$month."', is_blocked='".$blacklist."' where ID = $id";
+  $sql = "update royalmail_address set house_no = '" . $houseno . "',street='" . $street . "',city='" . $city . "',postcode='" . $postcode . "',month = '" . $month . "', is_blocked='" . $blacklist . "' where ID = $id";
 
-	if ($conn->query($sql) === TRUE) {
+  if ($conn->query($sql) === TRUE) {
     $sql = "delete from royalmail_appliance where AddressId = $id";
     $conn->query($sql);
-    foreach ($data as $d) {
-      $appliance_name = mysqli_real_escape_string($conn, $d['appliance_name']) ?? "";
-      $location = mysqli_real_escape_string($conn, $d['location']) ?? "";
-      $cowl = mysqli_real_escape_string($conn, $d['cowl']) == "Yes" ? "1" : "0";
-      $lined = mysqli_real_escape_string($conn, $d['lined']) == "Yes" ? "1" : "0";
-      $sql = "INSERT INTO royalmail_appliance (AddressId,appliance_name,location,cowl,lined)
-              VALUES ('" . $id ."', '" . $appliance_name . "','" . $location . "','" . $cowl . "','" . $lined . "')";
-      $conn->query($sql);
+    if (isset($data)) {
+      foreach ($data as $d) {
+        $appliance_name = mysqli_real_escape_string($conn, $d['appliance_name']) ?? "";
+        $location = mysqli_real_escape_string($conn, $d['location']) ?? "";
+        $cowl = mysqli_real_escape_string($conn, $d['cowl']) == "Yes" ? "1" : "0";
+        $lined = mysqli_real_escape_string($conn, $d['lined']) == "Yes" ? "1" : "0";
+        $sql = "INSERT INTO royalmail_appliance (AddressId,appliance_name,location,cowl,lined)
+                VALUES ('" . $id . "', '" . $appliance_name . "','" . $location . "','" . $cowl . "','" . $lined . "')";
+        $conn->query($sql);
+      }
     }
-   
-     
-    echo "Record udpated successfully";
 
+
+    echo "Record udpated successfully";
   } else {
 
     echo "Error: " . $sql . "<br>" . $conn->error;
-
   }
-
 }
 
 
 
 if ($_POST['action'] == "delete") {
 
-	$id = mysqli_real_escape_string($conn, $_POST['id']);
+  $id = mysqli_real_escape_string($conn, $_POST['id']);
 
-	$sql = "DELETE FROM royalmail_address WHERE ID=$id";
+  $sql = "DELETE FROM royalmail_address WHERE ID=$id";
 
 
 
-	if ($conn->query($sql) === TRUE) {
+  if ($conn->query($sql) === TRUE) {
 
-        echo "Record delete successfully";
+    echo "Record delete successfully";
+  } else {
 
-	} else {
-
-	    echo "Error: " . $sql . "<br>" . $conn->error;
-
-	}
-
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
 }
-function get_month_name($customer_month){
-	switch ($customer_month) {
-  case "01":
-    echo " January";
-    break;
-  case "02":
-    echo " February";
-    break;
-  case "03":
-    echo " March";
-    break;
-  case "04":
-    echo " April";
-    break;
-  case "05":
-    echo " May";
-    break;
-  case "06":
-    echo " June";
-    break;
-  case "07":
-    echo " July";
-    break;
-  case "08":
-    echo " August";
-    break;
-  case "09":
-    echo " September";
-    break;
-  case "10":
-    echo " October";
-    break;
-  case "11":
-    echo " November";
-    break;
-  case "12":
-    echo " December";
-    break;
-  default:
-    echo "Your favorite color is neither red, blue, nor green!";
+function get_month_name($customer_month)
+{
+  switch ($customer_month) {
+    case "01":
+      echo " January";
+      break;
+    case "02":
+      echo " February";
+      break;
+    case "03":
+      echo " March";
+      break;
+    case "04":
+      echo " April";
+      break;
+    case "05":
+      echo " May";
+      break;
+    case "06":
+      echo " June";
+      break;
+    case "07":
+      echo " July";
+      break;
+    case "08":
+      echo " August";
+      break;
+    case "09":
+      echo " September";
+      break;
+    case "10":
+      echo " October";
+      break;
+    case "11":
+      echo " November";
+      break;
+    case "12":
+      echo " December";
+      break;
+    default:
+      echo "Your favorite color is neither red, blue, nor green!";
+  }
 }
-}
-
-?>
