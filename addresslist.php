@@ -16,20 +16,20 @@
         .ui-datepicker-calendar {
             display: none;
         }
-
+        
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 25px;
         }
-
+        
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-
+        
         .slider {
             position: absolute;
             cursor: pointer;
@@ -41,7 +41,7 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
+        
         .slider:before {
             position: absolute;
             content: "";
@@ -53,39 +53,38 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
+        
         #blacklist:checked+.slider {
             background-color: #ea4f4f;
         }
-
+        
         .newcheckbox:checked+.slider {
-            background-color: #ea4f4f;
+            background-color: #218838;
         }
-
+        
         input:focus+.slider {
             box-shadow: 0 0 1px #2196F3;
         }
-
+        
         input:checked+.slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
-
         /* Rounded sliders */
-
+        
         .slider.round {
             border-radius: 34px;
         }
-
+        
         .slider.round:before {
             border-radius: 50%;
         }
-
+        
         .months_list img {
             cursor: pointer;
         }
-
+        
         .months_list p {
             cursor: pointer;
             font-size: 22px;
@@ -359,8 +358,34 @@
                                 </div>
                             </div>
                         </div>
+
+
+                        <!--Third Tab-->
+
+                        <div class="card-body" id="third-tab">
+                            <div class="row d-flex">
+                                <div class="col-sm-12">
+                                    <table class='table'>
+                                        <thead>
+                                            <tr>
+                                                <th>Appliance</th>
+                                                <th>Location</th>
+                                                <th>Cowl</th>
+                                                <th>Lined</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id='appliance_list_view'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--End Third Tab-->
                     </form>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id='btnskip' type="button" onclick="skip();">Skip</button>
+                        <button type="button" class="btn btn-success" id='btnprev' type="button" onclick="Prev();">Back</button>
                         <button type="button" class="btn btn-primary" id='btnnext' type="button" onclick="Next();">Next</button>
                         <button type="button" class="btn btn-primary" id='btnsave' type="button" onclick="EditAddress();">Save changes</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -416,18 +441,56 @@
             });
 
             function FirstTab() {
-                $("#appliance_list").empty();
+                $("#appliance_list,#appliance_list_view").empty();
+                $("#btnskip").show();
+                $("#btnprev").hide();
                 $("#btnnext").show();
                 $("#btnsave").hide();
                 $("#first-tab").show();
                 $("#second-tab").hide();
+                $("#third-tab").hide();
             }
 
             function Next() {
+                $("#btnskip").hide();
                 $("#btnnext").hide();
-                $("#btnsave").show();
+                $("#btnprev").hide();
+                $("#btnsave").hide();
                 $("#first-tab").hide();
+                $("#third-tab").hide();
+                if ($("#second-tab").is(":visible")) {
+                    $("#second-tab").hide();
+                    $("#btnsave").show();
+                    $("#btnprev").show();
+                    $("#third-tab").show();
+                } else {
+                    $("#btnnext").show();
+                    $("#btnprev").show();
+                    $("#second-tab").show();
+                }
+            }
+
+            function Prev() {
+                $("#btnnext").hide();
+                $("#btnprev").hide();
+                $("#btnsave").hide();
+                $("#first-tab").hide();
+                $("#third-tab").hide();
+                if ($("#second-tab").is(":visible")) {
+                    $("#btnskip").show();
+                    $("#second-tab").hide();
+                    $("#first-tab").show();
+                    $("#btnnext").show();
+                } else {
+                    $("#btnprev").show();
+                    $("#btnnext").show();
+                    $("#second-tab").show();
+                }
+            }
+
+            function skip() {
                 $("#second-tab").show();
+                Next();
             }
 
             function AddAppliance() {
@@ -457,6 +520,15 @@
                             <i class='fa fa-trash'></i>
                         </button>
                     </td>
+                </tr>
+                `);
+
+                $('#appliance_list_view').append(`
+                <tr>
+                    <td class='tdAppliance'>${data.Appliance}</td>
+                    <td class='tdLocation'>${data.Location}</td>
+                    <td class='tdCowl'>${data.Cowl}</td>
+                    <td class='tdLined'>${data.Lined}</td>
                 </tr>
                 `);
             }
