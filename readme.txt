@@ -37,7 +37,7 @@ Port
 User name
 dbu2161031
 Type and version
-MySQL 5.7
+MySQL 5.7`x
 Storage
 0 of 2147 MB used
 

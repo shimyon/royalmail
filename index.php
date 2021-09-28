@@ -294,7 +294,8 @@
     }
 
     function codeAddress(geocoder, map) {
-      let add = googleAddress.replace(/\n/g, '+');
+      let add = googleAddress.replace(/\n/g, ',+');
+      add = add.replace(/ /g, '+');
       geocoder.geocode({
         'address': add
       }, function(results, status) {
