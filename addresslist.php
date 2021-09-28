@@ -16,20 +16,20 @@
         .ui-datepicker-calendar {
             display: none;
         }
-
+        
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 25px;
         }
-
+        
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-
+        
         .slider {
             position: absolute;
             cursor: pointer;
@@ -41,7 +41,7 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
+        
         .slider:before {
             position: absolute;
             content: "";
@@ -53,39 +53,38 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
+        
         #blacklist:checked+.slider {
             background-color: #ea4f4f;
         }
-
+        
         .newcheckbox:checked+.slider {
             background-color: #218838;
         }
-
+        
         input:focus+.slider {
             box-shadow: 0 0 1px #2196F3;
         }
-
+        
         input:checked+.slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
-
         /* Rounded sliders */
-
+        
         .slider.round {
             border-radius: 34px;
         }
-
+        
         .slider.round:before {
             border-radius: 50%;
         }
-
+        
         .months_list img {
             cursor: pointer;
         }
-
+        
         .months_list p {
             cursor: pointer;
             font-size: 22px;
@@ -215,7 +214,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Your Address Details</h5>
+                    <h5 class="modal-title" id="modal-title">Edit Your Address Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -424,6 +423,7 @@
             var calyear = 0;
             var geocoder;
             var map;
+            var paramMonth = '<?php echo $_GET["month"] ?? "" ?>';
             // $(function() {
             //     $('.date-picker').datepicker({
             //         changeMonth: true,
@@ -703,6 +703,7 @@
                                 return `
                     <button class ='btndelete actionbtn btn btn-sm' data-id='${data}'><i class='fa fa-trash'></i>&nbsp;Delete</button>
                     <button class ='btnedit actionbtn btn btn-sm' data-id='${data}'><i class='fa fa-edit'></i>&nbsp;Edit</button>
+                    <button class ='btnview actionbtn btn btn-sm' data-id='${data}'><i class="fa fa-file-alt"></i>&nbsp;View</button>
                     `;
                             }
                         },
@@ -822,6 +823,85 @@
 
             function AfterDrawTable() {
                 var that = this;
+                $('.btnview').click(function() {
+                    editId = $(this).attr('data-id');
+                    $.ajax({
+                        url: 'api/month_count_action.php',
+                        datatype: 'json',
+                        type: "post",
+                        data: {
+                            "action": 'get_month',
+                            'id': editId
+                        },
+                        success: function(response) {
+                            $data = JSON.parse(response);
+                            console.log(response);
+                            $('#blacklist').prop("checked", false);
+                            $('#month').prop("disabled", false);
+                            $('#month').val($data['month']);
+                            if ($data['is_blocked'] == 'Yes') {
+                                $('#blacklist').prop("checked", true);
+                                $('#month').prop("disabled", true);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            debugger
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+                    $.ajax({
+                        url: 'api/address_action.php',
+                        datatype: 'json',
+                        type: "post",
+                        data: {
+                            "action": 'getAppliance',
+                            'addressid': editId
+                        },
+                        success: function(response) {
+                            let res = JSON.parse(response);
+                            res.forEach(f => {
+                                let data = {
+                                    "id": f.Id,
+                                    "Appliance": f.appliance_name,
+                                    "Location": f.location,
+                                    "Cowl": f.cowl,
+                                    "Lined": $("#lined").is(":checked") ? "Yes" : "No"
+                                }
+                                AddApplicationCall(data);
+                            });
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            debugger
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+
+                    let houseno = $(this).closest('tr').find('.tdhouse_no').text();
+                    $('#myModal').modal('show');
+                    $('#houseno').val(houseno);
+                    let street = $(this).closest('tr').find('.tdstreet').text();
+
+                    $('#street').val(street);
+                    let town = $(this).closest('tr').find('.tdtown').text();
+
+                    $('#town').val(town);
+                    let city = $(this).closest('tr').find('.tdcity').text();
+
+                    $('#city').val(city);
+                    let postcode = $(this).closest('tr').find('.tdpostcode').text();
+
+                    $('#postcode').val(postcode);
+                    let month = $(this).closest('tr').find('.tdmonth').text();
+
+                    $('#month').val(month);
+                    let blacklist = $(this).closest('tr').find('.tdblacklist').text();
+
+                    FirstTab();
+                    skip();
+                    $("#btnprev, #btnsave").hide();
+                    $("#modal-title").text("View Your Address Details");
+                })
+
                 $('.btnedit').click(function() {
                     editId = $(this).attr('data-id');
                     $.ajax({
@@ -895,6 +975,7 @@
 
                     $('#month').val(month);
                     let blacklist = $(this).closest('tr').find('.tdblacklist').text();
+                    $("#modal-title").text("Edit Your Address Details");
                 })
 
                 $(".btndelete").click(function() {
@@ -929,7 +1010,11 @@
 
             function default_year_results() {
                 $year = new Date().getFullYear();
-                $month_no = '0';
+                if (paramMonth == '') {
+                    $month_no = '0';
+                } else {
+                    $month_no = selectedMonth = paramMonth;
+                }
                 $('.year').val($year);
                 RefreshDatatable($month_no, $year);
                 Global.GetCommonValue($year);
