@@ -431,6 +431,10 @@
             }
 
             function AddAppliance() {
+                if ($("#appliance_list tr").length == 6) {
+                    alert("Max 6 appliances will be added");
+                    return false;
+                }
                 let data = {
                     "id": 0,
                     "Appliance": $("#appliance option:selected").text(),

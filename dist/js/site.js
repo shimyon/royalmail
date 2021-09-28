@@ -26,7 +26,8 @@ var Global = {
             }
         });
     },
-    Export: function (selectedMonth) {
+    Export: function (selectedMonth, filename) {
+        filename = filename || selectedMonth;
         $.ajax({
             datatype: 'json',
             url: 'api/address_export.php',
@@ -45,7 +46,7 @@ var Global = {
                 var downloadLink = document.createElement("a");
                 var blob = new Blob(["\ufeff", csv]);
                 var url = URL.createObjectURL(blob);
-                var csvName = selectedMonth == undefined || selectedMonth == "" ? "Data" : selectedMonth;
+                var csvName = filename == undefined || filename == "" ? "Data" : filename;
                 downloadLink.href = url;
                 downloadLink.download = csvName + ".csv";
 
@@ -91,6 +92,7 @@ $(function () {
     Global.GetCommonValue(curyear);
     $(".exportbtn").click(function () {
         let month = $(this).attr('data-month');
-        Global.Export(month);
+        let monthname = $(this).find("span").text();
+        Global.Export(month, monthname);
     })
 })
