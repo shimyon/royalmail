@@ -16,20 +16,20 @@
         .ui-datepicker-calendar {
             display: none;
         }
-        
+
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 25px;
         }
-        
+
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-        
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -41,7 +41,7 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-        
+
         .slider:before {
             position: absolute;
             content: "";
@@ -53,38 +53,39 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-        
+
         #blacklist:checked+.slider {
             background-color: #ea4f4f;
         }
-        
+
         .newcheckbox:checked+.slider {
             background-color: #218838;
         }
-        
+
         input:focus+.slider {
             box-shadow: 0 0 1px #2196F3;
         }
-        
+
         input:checked+.slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
+
         /* Rounded sliders */
-        
+
         .slider.round {
             border-radius: 34px;
         }
-        
+
         .slider.round:before {
             border-radius: 50%;
         }
-        
+
         .months_list img {
             cursor: pointer;
         }
-        
+
         .months_list p {
             cursor: pointer;
             font-size: 22px;
@@ -365,6 +366,10 @@
                         <div class="card-body" id="third-tab">
                             <div class="row d-flex">
                                 <div class="col-sm-6">
+                                    <div id="monthinfo" style="margin-bottom: 5px;">
+                                        <span>Notification: </span>
+                                        <span id="monthinfoname" style="font-size: 14px;" class="badge badge-primary"></span>
+                                    </div>
                                     <div id="addressconfirm">
 
                                     </div>
@@ -494,6 +499,12 @@
             }
 
             function codeAddress() {
+                if ($("#blacklist").is(":checked")) {
+                    $("#monthinfo").hide();
+                } else {
+                    $("#monthinfo").show();
+                    $("#monthinfoname").text($("#month option:selected").text());
+                }
                 let googleAddress = $('#houseno').val();
                 googleAddress += ",+" + $('#street').val();
                 googleAddress += ",+" + $('#city').val();
@@ -501,31 +512,54 @@
                 googleAddress += ",+" + $('#country').val();
                 // let add = googleAddress.replace(/\n/g, ',+');
                 googleAddress = googleAddress.replace(/ /g, '+');
-                geocoder.geocode({
-                    'address': googleAddress
-                }, function(results, status) {
-                    if (status === 'OK') {
-                        if (results.length > 0) {
-                            let loc = results[0].geometry.location;
-                            let astorPlace = {
-                                lat: loc.lat(),
-                                lng: loc.lng()
-                            };
-                            var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
-                            var mapOptions = {
-                                zoom: 1,
-                                center: latlng
-                            };
-                            map.setOptions(mapOptions);
-                            map.setPosition(astorPlace);
+
+                $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
+                    let results = data.results;
+                    if (results.length > 0) {
+                        let loc = results[0].geometry.location;
+                        let astorPlace = {
+                            lat: loc.lat,
+                            lng: loc.lng
+                        };
+                        var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                        var mapOptions = {
+                            zoom: 1,
+                            center: latlng
+                        };
+                        map.setOptions(mapOptions);
+                        map.setPosition(astorPlace);
 
 
-                            google.maps.event.trigger(map, 'resize');
-                        }
-                    } else {
-                        alert('Geocode was not successful for the following reason: ' + status);
+                        google.maps.event.trigger(map, 'resize');
                     }
-                });
+                }, (err) => {
+                    alert(err);
+                })
+                // geocoder.geocode({
+                //     'address': googleAddress
+                // }, function(results, status) {
+                //     if (status === 'OK') {
+                //         if (results.length > 0) {
+                //             let loc = results[0].geometry.location;
+                //             let astorPlace = {
+                //                 lat: loc.lat(),
+                //                 lng: loc.lng()
+                //             };
+                //             var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                //             var mapOptions = {
+                //                 zoom: 1,
+                //                 center: latlng
+                //             };
+                //             map.setOptions(mapOptions);
+                //             map.setPosition(astorPlace);
+
+
+                //             google.maps.event.trigger(map, 'resize');
+                //         }
+                //     } else {
+                //         alert('Geocode was not successful for the following reason: ' + status);
+                //     }
+                // });
             }
 
             function ShowConfirmTab() {
@@ -747,10 +781,10 @@
                     fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                         if (aData.is_blocked == "Yes") {
                             $('td', nRow).css('background-color', 'rgb(252 125 125)');
+                        } else if (aData.month && aData.month != "") {
+                            $('td', nRow).css('background-color', 'lightblue');
                         } else if (aData.month == "") {
                             $('td', nRow).css('background-color', '');
-                        } else {
-                            $('td', nRow).css('background-color', 'lightblue');
                         }
                     }
                 });
@@ -899,7 +933,7 @@
                     FirstTab();
                     skip();
                     $("#btnprev, #btnsave").hide();
-                    $("#modal-title").text("View Your Address Details");
+                    $("#modal-title").text("Customer Card");
                 })
 
                 $('.btnedit').click(function() {
