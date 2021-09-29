@@ -212,7 +212,7 @@
     <!-- ./wrapper -->
 
     <div class="modal" id='myModal' tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg" role="document" style="max-width: 1024px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-title">Edit Your Address Details</h5>
@@ -365,7 +365,7 @@
 
                         <div class="card-body" id="third-tab">
                             <div class="row d-flex">
-                                <div class="col-sm-6">
+                                <div class="col-sm-5">
                                     <div id="monthinfo" style="margin-bottom: 5px;">
                                         <span>Notification: </span>
                                         <span id="monthinfoname" style="font-size: 14px;" class="badge badge-primary"></span>
@@ -386,7 +386,13 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="col-sm-6" id="map" style="position: relative; overflow:hidden; min-height: 300px; min-width: 300px;">
+
+                                <!-- 
+                                    <div class="col-sm-6" id="map" style="position: relative; overflow:hidden; min-height: 300px; min-width: 300px;">
+                                    </div> 
+                                -->
+                                <div class="col-sm-7" style="position: relative; overflow:auto;">
+                                    <img id="houseimg" src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location=7+Percy+Way,+Walbottle,+Newcastle+upon+Tyne+NE15+8JA,+UK&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0" />
                                 </div>
                             </div>
                         </div>
@@ -419,7 +425,7 @@
         <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script>
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script> -->
 
         <script type='text/javascript'>
             var oTable, editId;
@@ -512,29 +518,29 @@
                 googleAddress += ",+" + $('#country').val();
                 // let add = googleAddress.replace(/\n/g, ',+');
                 googleAddress = googleAddress.replace(/ /g, '+');
+                $("#houseimg").attr("src", `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`);
+                // $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
+                //     let results = data.results;
+                //     if (results.length > 0) {
+                //         let loc = results[0].geometry.location;
+                //         let astorPlace = {
+                //             lat: loc.lat,
+                //             lng: loc.lng
+                //         };
+                //         var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                //         var mapOptions = {
+                //             zoom: 1,
+                //             center: latlng
+                //         };
+                //         map.setOptions(mapOptions);
+                //         map.setPosition(astorPlace);
 
-                $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
-                    let results = data.results;
-                    if (results.length > 0) {
-                        let loc = results[0].geometry.location;
-                        let astorPlace = {
-                            lat: loc.lat,
-                            lng: loc.lng
-                        };
-                        var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
-                        var mapOptions = {
-                            zoom: 1,
-                            center: latlng
-                        };
-                        map.setOptions(mapOptions);
-                        map.setPosition(astorPlace);
 
-
-                        google.maps.event.trigger(map, 'resize');
-                    }
-                }, (err) => {
-                    alert(err);
-                })
+                //         google.maps.event.trigger(map, 'resize');
+                //     }
+                // }, (err) => {
+                //     alert(err);
+                // })
                 // geocoder.geocode({
                 //     'address': googleAddress
                 // }, function(results, status) {
