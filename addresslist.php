@@ -90,11 +90,22 @@
             cursor: pointer;
             font-size: 22px;
         }
+
+
+        @media print {
+            .print {
+                display: block;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
+    <div class="wrapper no-print">
 
         <?php include('_nav.php') ?>
 
@@ -216,7 +227,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-title">Edit Your Address Details</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close no-print" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -387,24 +398,25 @@
                                     </table>
                                 </div>
 
-                                <!-- 
-                                    <div class="col-sm-6" id="map" style="position: relative; overflow:hidden; min-height: 300px; min-width: 300px;">
-                                    </div> 
-                                -->
-                                <div class="col-sm-7" style="position: relative; overflow:auto;">
-                                    <img id="houseimg" src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location=7+Percy+Way,+Walbottle,+Newcastle+upon+Tyne+NE15+8JA,+UK&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0" />
+
+                                <div class="col-sm-7" id="map" style="position: relative; overflow:hidden; min-height: 600px; min-width: 500px;">
                                 </div>
+
+                                <!-- <div class="col-sm-7" style="position: relative; overflow:auto; ">
+                                    <img id="houseimg" src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location=7+Percy+Way,+Walbottle,+Newcastle+upon+Tyne+NE15+8JA,+UK&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0" />
+                                </div> -->
                             </div>
                         </div>
 
                         <!--End Third Tab-->
                     </form>
-                    <div class="modal-footer">
+                    <div class="modal-footer no-print">
                         <button type="button" class="btn btn-success" id='btnskip' type="button" onclick="skip();">Skip</button>
                         <button type="button" class="btn btn-success" id='btnprev' type="button" onclick="Prev();">Back</button>
                         <button type="button" class="btn btn-primary" id='btnnext' type="button" onclick="Next();">Next</button>
                         <button type="button" class="btn btn-primary" id='btnsave' type="button" onclick="EditAddress();">Save changes</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id='btnprint' type="button" onclick="printView();">Print</button>
                     </div>
                 </div>
             </div>
@@ -425,7 +437,7 @@
         <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script>
 
         <script type='text/javascript'>
             var oTable, editId;
@@ -479,6 +491,11 @@
                 default_year_results();
             })
 
+            function printView() {
+                $("#myModal").addClass("print");
+                window.print();
+            }
+
             function initMap() {
                 // var mapOptions = {
                 //     center: new google.maps.LatLng(42.345573, -71.098326),
@@ -518,29 +535,34 @@
                 googleAddress += ",+" + $('#country').val();
                 // let add = googleAddress.replace(/\n/g, ',+');
                 googleAddress = googleAddress.replace(/ /g, '+');
-                $("#houseimg").attr("src", `https://maps.googleapis.com/maps/api/streetview?size=600x300&location=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`);
-                // $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
-                //     let results = data.results;
-                //     if (results.length > 0) {
-                //         let loc = results[0].geometry.location;
-                //         let astorPlace = {
-                //             lat: loc.lat,
-                //             lng: loc.lng
-                //         };
-                //         var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
-                //         var mapOptions = {
-                //             zoom: 1,
-                //             center: latlng
-                //         };
-                //         map.setOptions(mapOptions);
-                //         map.setPosition(astorPlace);
+
+                // var windheight = $(window).height() - 200;
+                // var windwidht = $(window).width() - 200;
+                // $("#houseimg").attr("src", `https://maps.googleapis.com/maps/api/streetview?size=${windheight}x${windwidht}&location=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`);
 
 
-                //         google.maps.event.trigger(map, 'resize');
-                //     }
-                // }, (err) => {
-                //     alert(err);
-                // })
+                $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
+                    let results = data.results;
+                    if (results.length > 0) {
+                        let loc = results[0].geometry.location;
+                        let astorPlace = {
+                            lat: loc.lat,
+                            lng: loc.lng
+                        };
+                        var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                        var mapOptions = {
+                            zoom: 1,
+                            center: latlng
+                        };
+                        map.setOptions(mapOptions);
+                        map.setPosition(astorPlace);
+
+
+                        google.maps.event.trigger(map, 'resize');
+                    }
+                }, (err) => {
+                    alert(err);
+                })
                 // geocoder.geocode({
                 //     'address': googleAddress
                 // }, function(results, status) {
@@ -599,6 +621,7 @@
                 $("#appliance_list,#appliance_list_view").empty();
                 $("#btnskip").show();
                 $("#btnprev").hide();
+                $("#btnprint").hide();
                 $("#btnnext").show();
                 $("#btnsave").hide();
                 $("#first-tab").show();
@@ -607,6 +630,7 @@
             }
 
             function Next() {
+                $("#btnprint").hide();
                 $("#btnskip").hide();
                 $("#btnnext").hide();
                 $("#btnprev").hide();
@@ -616,6 +640,7 @@
                 if ($("#second-tab").is(":visible")) {
                     $("#second-tab").hide();
                     $("#btnsave").show();
+                    $("#btnprint").show();
                     $("#btnprev").show();
                     $("#third-tab").show();
                     setTimeout(() => {
@@ -629,6 +654,7 @@
             }
 
             function Prev() {
+                $("#btnprint").hide();
                 $("#btnnext").hide();
                 $("#btnprev").hide();
                 $("#btnsave").hide();

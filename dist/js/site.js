@@ -1,5 +1,5 @@
 var Global = {
-    GetCommonValue: function($year) {
+    GetCommonValue: function ($year) {
         $.ajax({
             datatype: 'json',
             url: 'api/month_count_action.php',
@@ -8,7 +8,7 @@ var Global = {
                 "action": 'months_count',
                 "year": $year
             },
-            success: function(response) {
+            success: function (response) {
                 let res = JSON.parse(response);
                 $data = res.months;
                 $count = $data.length;
@@ -19,18 +19,18 @@ var Global = {
                 $('.blocklist p').text(res.blocked_count);
                 $('.unassign p').text(res.unassign);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 debugger
 
                 console.log(textStatus, errorThrown);
             }
         });
     },
-    Export: function(selectedMonth, filename) {
-        if (selectedMonth != '13' && selectedMonth != '14') {
-            location.replace(`./addresslist.php?month=${selectedMonth}`);
-            return;
-        }
+    Export: function (selectedMonth, filename) {
+        // if (selectedMonth != '13' && selectedMonth != '14') {
+        location.replace(`./addresslist.php?month=${selectedMonth}`);
+        return;
+        // }
         filename = filename || selectedMonth;
         $.ajax({
             datatype: 'json',
@@ -40,7 +40,7 @@ var Global = {
                 "action": 'export_month',
                 "month": selectedMonth
             },
-            success: function(response) {
+            success: function (response) {
                 var json = JSON.parse(response);
                 if (json.length == 0) {
                     alert("No Data Found");
@@ -59,14 +59,14 @@ var Global = {
                 document.body.removeChild(downloadLink);
 
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 debugger
 
                 console.log(textStatus, errorThrown);
             }
         });
     },
-    JSON2CSV: function(objArray) {
+    JSON2CSV: function (objArray) {
         var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
         var str = '';
         var line = '';
@@ -91,10 +91,10 @@ var Global = {
     }
 }
 
-$(function() {
+$(function () {
     let curyear = new Date().getFullYear();
     Global.GetCommonValue(curyear);
-    $(".exportbtn").click(function() {
+    $(".exportbtn").click(function () {
         let month = $(this).attr('data-month');
         let monthname = $(this).find("span").text();
         Global.Export(month, monthname);

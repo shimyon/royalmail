@@ -166,13 +166,12 @@
 
     function initMap() {
       var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
+        zoom: 8,
         center: {
           lat: 42.345573,
           lng: -71.098326
         }
       });
-      map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
       // var map = new google.maps.StreetViewPanorama(
       //   document.getElementById("map"), {
       //     position: {
@@ -317,10 +316,10 @@
             // map.setZoom(8);
 
             map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-              map: map,
-              position: results[0].geometry.location
-            });
+            // var marker = new google.maps.Marker({
+            //   map: map,
+            //   position: results[0].geometry.location
+            // });
           }
         } else {
           alert('Geocode was not successful for the following reason: ' + status);

@@ -90,9 +90,16 @@ if (isset($_GET['month']) && $_GET['month'] != "0" && $_GET['month'] != "") {
 	if (trim($sWhere) == "") {
 		$sWhere .= " WHERE month = {$_GET['month']} ";
 	} else {
-		$sWhere .= ' AND ( month = ' . $_GET['month'] . ') ';
+		if ($_GET['month'] == "13") {
+			$sWhere .= " AND (is_blocked ='Yes') ";
+		} else if ($_GET['month'] == "14") {
+			$sWhere .= " AND (ifnull(month,'')='' and ifnull(is_blocked,'')!='Yes' ) ";
+		} else {
+			$sWhere .= ' AND ( month = ' . $_GET['month'] . ') ';
+		}
 	}
 }
+
 // if ( isset($_GET['year']) && $_GET['year'] != "0" )
 // {
 // 	if (trim($sWhere) == "")

@@ -5,16 +5,17 @@ $GLOBALS['loginuser'] = "admin@email.com";
 $GLOBALS['loginpass'] = "Password123#";
 
 $GLOBALS['ADDRESSNOW_API_KEY'] = "ZW95-FD53-EW82-PM81";
-// $GLOBALS['ADDRESSNOW_API_KEY'] = "wh44-gx43-hh39-dn34";
 
-$servername = "emoiss.in";
+$servername = "db5004866643.hosting-data.io";
 $GLOBALS['servername'] = $servername;
 
-$username = "emoiss_user";
+$username = "dbu2242394";
 $GLOBALS['username'] = $username;
 
-$password = "emoiss_pass";
+$password = "SBSSDEVELOPER@123";
 $GLOBALS['password'] = $password;
 
-$dbname = "emoiss_wish";
+$dbname = "dbs4079795";
 $GLOBALS['dbname'] = $dbname;
+
+?>
