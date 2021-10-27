@@ -27,6 +27,62 @@ if ($_POST['action'] == "deleteAppliance") {
   }
 }
 
+if ($_POST['action'] == "getTask") {
+  $arr = array();
+  $id = mysqli_real_escape_string($conn, $_POST['addressid']);
+  $where = "";
+
+  if ($id != "") {
+    $where = " WHERE addressid= $id ";
+  }
+
+  $sql = "SELECT a.id, DATE_FORMAT(taskDate,'%Y-%m-%d') taskDate,a.note,addressId, ";
+  $sql .= "CONCAT( house_no ,', ',street,', ',city,', ',postcode) address,taskTime  ";
+  $sql .= "FROM royalmail_taskdetail a LEFT JOIN royalmail_address b ON a.addressid = b.id ";
+  $sql .= $where;
+  $sql .= "ORDER BY taskDate ";
+
+  $sql_result = $conn->query($sql);
+  if ($sql_result->num_rows > 0) {
+    while ($row = $sql_result->fetch_assoc()) {
+      $arr[] = $row;
+    }
+  }
+  echo json_encode($arr);
+}
+
+if ($_POST['action'] == "deleteBooking") {
+
+  $id = mysqli_real_escape_string($conn, $_POST['id']);
+
+  $sql = "DELETE FROM royalmail_taskdetail WHERE ID=$id";
+
+  if ($conn->query($sql) === TRUE) {
+
+    echo "Record deleted successfully";
+  } else {
+
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+}
+
+if ($_POST['action'] == "getRecommended") {
+  $arr = array();
+  $street = mysqli_real_escape_string($conn, $_POST['street']);
+
+  $sql = "SELECT DATE_FORMAT(taskDate,'%M %D' ) taskDate ";
+  $sql .= "FROM royalmail_taskdetail a LEFT JOIN royalmail_address b ON a.addressid = b.id ";
+  $sql .= "WHERE b.street='" . $street . "' AND taskdate > NOW() ORDER BY taskDate ";
+
+  $sql_result = $conn->query($sql);
+  if ($sql_result->num_rows > 0) {
+    while ($row = $sql_result->fetch_assoc()) {
+      $arr[] = $row;
+    }
+  }
+  echo json_encode($arr);
+}
+
 if ($_POST['action'] == "insert") {
   $address =  $_POST['address'];
   $blacklist_customer =  $_POST['blacklist_customer'];
@@ -72,6 +128,9 @@ if ($_POST['action'] == "edit") {
   $postcode = mysqli_real_escape_string($conn, $_POST['postcode']);
   $month = mysqli_real_escape_string($conn, $_POST['month']);
   $blacklist = mysqli_real_escape_string($conn, $_POST['blacklist']);
+  $note = mysqli_real_escape_string($conn, $_POST['note']);
+  $taskDate = mysqli_real_escape_string($conn, $_POST['taskDate']);
+  $taskTime = mysqli_real_escape_string($conn, $_POST['taskTime']);
   $data = $_POST['appliance'] ?? array();
 
   $id = mysqli_real_escape_string($conn, $_POST['id']);
@@ -92,7 +151,13 @@ if ($_POST['action'] == "edit") {
         $conn->query($sql);
       }
     }
+    //formatting date
+    $taskDate = date("Y-m-d H:i:s", strtotime($taskDate));
 
+    $sql = "INSERT INTO royalmail_taskdetail (addressId,taskDate,note,taskTime) VALUES ('" . $id . "','" . $taskDate . "','" . $note . "','" . $taskTime . "')";
+    if (!$conn->query($sql) === TRUE) {
+      echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 
     echo "Record udpated successfully";
   } else {

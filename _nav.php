@@ -17,6 +17,9 @@
       <li class="nav-item exportbtn d-none d-sm-inline-block">
         <a href="addresslist.php" class="nav-link">Customers</a>
       </li>
+      <li class="nav-item exportbtn d-none d-sm-inline-block">
+        <a href="calender.php" class="nav-link">Calender</a>
+      </li>
     </ul>
 
     <!-- Right navbar links -->

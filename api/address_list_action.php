@@ -1,7 +1,7 @@
 <?php
 include("../lib/connection.php");
 
-$aColumns = array('Id', 'house_no', 'street', 'city', 'postcode', 'country', 'month', 'is_blocked', 'CreatedDate');
+$aColumns = array('a.Id', 'house_no', 'street', 'city', 'postcode', 'country', 'month', 'is_blocked', 'CreatedDate');
 
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = "Id";
@@ -28,9 +28,9 @@ $gaSql['server']     = $GLOBALS['servername'];
 	 * Paging
 	 */
 $sLimit = "";
-if (isset($_GET['start']) && $_GET['length'] != '-1') {
-	$sLimit = "LIMIT " . mysqli_real_escape_string($conn, $_GET['start']) . ", " .
-		mysqli_real_escape_string($conn,  $_GET['length']);
+if (isset($_POST['start']) && $_POST['length'] != '-1') {
+	$sLimit = "LIMIT " . mysqli_real_escape_string($conn, $_POST['start']) . ", " .
+		mysqli_real_escape_string($conn,  $_POST['length']);
 }
 
 
@@ -38,12 +38,12 @@ if (isset($_GET['start']) && $_GET['length'] != '-1') {
 	 * Ordering
 	 */
 $sOrder = '';
-if (isset($_GET['iSortCol_0'])) {
+if (isset($_POST['iSortCol_0'])) {
 	$sOrder = "ORDER BY  ";
-	for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
-		if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
-			$sOrder .= $aColumns[intval($_GET['iSortCol_' . $i])] . "
-				 	" . mysqli_real_escape_string($conn, $_GET['sSortDir_' . $i]) . ", ";
+	for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
+		if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
+			$sOrder .= $aColumns[intval($_POST['iSortCol_' . $i])] . "
+				 	" . mysqli_real_escape_string($conn, $_POST['sSortDir_' . $i]) . ", ";
 		}
 	}
 
@@ -61,10 +61,10 @@ if (isset($_GET['iSortCol_0'])) {
 	 * on very large tables, and MySQL's regex functionality is very limited
 	 */
 $sWhere = "";
-if (isset($_GET['search']) && $_GET['search'] != "") {
+if (isset($_POST['search']) && $_POST['search'] != "") {
 	$sWhere = "WHERE (";
 	for ($i = 0; $i < count($aColumns); $i++) {
-		$searchval = mysqli_real_escape_string($conn, $_GET['search']['value']);
+		$searchval = mysqli_real_escape_string($conn, $_POST['search']['value']);
 		$sWhere .= $aColumns[$i] . " LIKE '%" . $searchval . "%' OR ";
 	}
 	$sWhere = substr_replace($sWhere, "", -3);
@@ -74,41 +74,41 @@ if (isset($_GET['search']) && $_GET['search'] != "") {
 
 /* Individual column filtering */
 for ($i = 0; $i < count($aColumns); $i++) {
-	if (isset($_GET['searchable_' . $i]) && $_GET['searchable_' . $i] == "true" && $_GET['search_' . $i] != '') {
+	if (isset($_POST['searchable_' . $i]) && $_POST['searchable_' . $i] == "true" && $_POST['search_' . $i] != '') {
 		if ($sWhere == "") {
 			$sWhere = "WHERE ";
 		} else {
 			$sWhere .= " AND ";
 		}
-		$sWhere .= $aColumns[$i] . " LIKE '%" . mysqli_real_escape_string($conn, $_GET['search_' . $i]) . "%' ";
+		$sWhere .= $aColumns[$i] . " LIKE '%" . mysqli_real_escape_string($conn, $_POST['search_' . $i]) . "%' ";
 	}
 }
 
 
 
-if (isset($_GET['month']) && $_GET['month'] != "0" && $_GET['month'] != "") {
+if (isset($_POST['month']) && $_POST['month'] != "0" && $_POST['month'] != "") {
 	if (trim($sWhere) == "") {
-		$sWhere .= " WHERE month = {$_GET['month']} ";
+		$sWhere .= " WHERE month = {$_POST['month']} ";
 	} else {
-		if ($_GET['month'] == "13") {
+		if ($_POST['month'] == "13") {
 			$sWhere .= " AND (is_blocked ='Yes') ";
-		} else if ($_GET['month'] == "14") {
+		} else if ($_POST['month'] == "14") {
 			$sWhere .= " AND (ifnull(month,'')='' and ifnull(is_blocked,'')!='Yes' ) ";
 		} else {
-			$sWhere .= ' AND ( month = ' . $_GET['month'] . ') ';
+			$sWhere .= ' AND ( month = ' . $_POST['month'] . ') ';
 		}
 	}
 }
 
-// if ( isset($_GET['year']) && $_GET['year'] != "0" )
+// if ( isset($_POST['year']) && $_POST['year'] != "0" )
 // {
 // 	if (trim($sWhere) == "")
 // 	{
-// 		$sWhere .= " WHERE YEAR(CreatedDate) = ${$_GET['year']} ";
+// 		$sWhere .= " WHERE YEAR(CreatedDate) = ${$_POST['year']} ";
 // 	}
 // 	else
 // 	{
-// 		$sWhere .= ' AND (YEAR(CreatedDate) = '. $_GET['year'] . ') ';
+// 		$sWhere .= ' AND (YEAR(CreatedDate) = '. $_POST['year'] . ') ';
 // 	}
 // }
 
@@ -117,13 +117,13 @@ if (isset($_GET['month']) && $_GET['month'] != "0" && $_GET['month'] != "") {
 	 * Get data to display
 	 */
 $sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS ifnull(MONTHNAME(STR_TO_DATE(month, '%m')), '') AS month_name, " . str_replace(" , ", " ", implode(", ", $aColumns)) . "
-		FROM   $sTable
-		$sWhere
+		SELECT SQL_CALC_FOUND_ROWS ifnull(MONTHNAME(STR_TO_DATE(month, '%m')), '') AS month_name,b.id AS taskId, " . str_replace(" , ", " ", implode(", ", $aColumns)) . "
+		FROM   $sTable  a LEFT JOIN royalmail_taskdetail b on a.id= b.addressid
+		$sWhere GROUP BY a.id 
 		$sOrder
 		$sLimit
 	";
-
+//echo json_encode($sQuery);
 // exit($sQuery);
 $rResult = mysqli_query($conn, $sQuery) or die(mysqli_error());
 
@@ -156,12 +156,12 @@ while ($developer = mysqli_fetch_assoc($rResult)) {
 /*
 	if export yes then it will export file
 	*/
-if (isset($_GET['export']) && $_GET['export'] == 'Y') {
+if (isset($_POST['export']) && $_POST['export'] == 'Y') {
 	echo json_encode($developers_record);
 } else {
 
 	$developer_data = array(
-		"sEcho" => intval($_GET['draw']),
+		"sEcho" => intval($_POST['draw']),
 		"iTotalRecords" => $iTotal,
 		"iTotalDisplayRecords" => $iFilteredTotal,
 		"aaData" => $developers_record

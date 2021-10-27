@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
     <?php include('_headerlink.php') ?>
     <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
     <style>
@@ -28,6 +27,14 @@
             opacity: 0;
             width: 0;
             height: 0;
+        }
+
+        .activeTab {
+            display: block !important;
+        }
+
+        .disableTab {
+            display: none !important;
         }
 
         .slider {
@@ -91,6 +98,63 @@
             font-size: 22px;
         }
 
+        .progressLabel {
+            margin: 0px;
+            margin-left: 10px;
+            background: gray;
+            color: white;
+            padding: 3px 10px 3px 10px;
+            border-radius: 15px;
+            transition: all 0.5s ease;
+        }
+
+        .selectedTabLabel {
+            background-color: #2ccf2c;
+            transition: all 0.5s ease;
+        }
+
+        .timeLabel {
+            font-size: 11px;
+        }
+
+        #bookingTable,
+        .timeTable {
+            border-collapse: separate;
+            border-spacing: 5px;
+        }
+
+        .timeTab,
+        .timeTable>tbody>tr>td {
+
+            color: #2ccf2c;
+            text-align: center;
+            border: 1px solid #b7bebf;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .timeTable>tbody>tr>td:hover {
+            background: #2ccf2c;
+            color: white;
+        }
+
+        .tdActive {
+            background: #34af71 !important;
+            color: white !important;
+        }
+
+        .popupLabel {
+            background: #3465af !IMPORTANT;
+            color: white;
+            padding: 2px 10px 2px 9px;
+            border-radius: 0px 12px 12px 0px;
+        }
+
+        .recommendLabel {
+            margin-left: 20px;
+            margin-bottom: 10px;
+            color: gray;
+        }
 
         @media print {
             .print {
@@ -223,17 +287,23 @@
     <!-- ./wrapper -->
 
     <div class="modal" id='myModal' tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document" style="max-width: 1024px;">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-title">Edit Your Address Details</h5>
+                    <div id='tabProgressbar'>
+                        <label class='progressLabel' id='label_1'>1</label>
+                        <label class='progressLabel' id='label_2'>2</label>
+                        <label class='progressLabel' id='label_3'>3</label>
+                        <label class='progressLabel' id='label_4'>4</label>
+                    </div>
                     <button type="button" class="close no-print" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="card-body" id="first-tab">
+                        <div class="card-body activeTab" id="first-tab" data-tab='1' style="display:none">
                             <div class="row d-flex ">
 
                                 <div class="form-group col-sm-6">
@@ -293,7 +363,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="form-group col-sm-12">
                                     <label style="margin-right:15px">Blacklist customer</label>
                                     <label class="switch" style="margin-right:20px">
@@ -304,7 +373,57 @@
 
                             </div>
                         </div>
-                        <div class="card-body" id="second-tab">
+
+                        <!-- Third Tab -->
+                        <div class="card-body" id="second-tab" data-tab='2' style="display:none">
+                            <div class="row">
+                                <div class='col-md-2'>
+                                    <label class='popupLabel'>Appointment</label>
+                                    <div class='row'>
+                                        <div class='col-md-4'>
+                                            <label id='lblDate' style='font-size: 50px;color:#2ccf2c;'></label>
+                                        </div>
+                                        <div class='col-md-7' style='padding:0px;padding-top:15px'>
+                                            <label id='lblDay' style='color: #a7a6a6;margin:0px;'></label>
+                                            <label id='lblMonth' style='font-size: 20px;margin:0px;'></label>
+                                        </div>
+                                        <label id='lblTime' style='font-size: 25px;margin-left: 10px;color: #30b6d5;'></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5" style='border-left: 1px solid lightgrey; border-right: 1px solid lightgrey;padding:0px;'>
+                                    <div class="col-md-12" style='margin-bottom: 20px;margin-left: 15px;    padding-top: 30px;'>
+                                        <div class="input-group date" data-provide="datepicker" id='dvDatePicker' style='width:50%;float:left;margin-right: 15px;
+'>
+                                            <div></div>
+                                        </div>
+                                        <table class='timeTable'>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12" style='overflow:auto; padding: 0px; padding-top: 5px; border-top: 1px solid #c1c0c0;'>
+                                        <label class='popupLabel' style='background:#2ccf2c'>Recommended</label>
+                                        <div id='dvRecommend'>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5" style='padding:0px;'>
+                                    <label class='popupLabel' style='background:#2ccf2c'>Bookings</label>
+                                    <div style='max-height:270px;overflow:auto;' class='col-md-12'>
+                                        <table id='bookingTable' style="width:100%">
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-12" style='border-top:1px solid lightgrey'>
+
+                                    <label for="userNote">Note</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="userNote" placeholder="Note">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" id="third-tab" data-tab='3' style="display:none">
                             <div class="row d-flex">
                                 <div class="form-group col-sm-6 ">
                                     <label for="month">Appliance</label>
@@ -370,11 +489,9 @@
                                 </div>
                             </div>
                         </div>
+                        <!--forth Tab-->
 
-
-                        <!--Third Tab-->
-
-                        <div class="card-body" id="third-tab">
+                        <div class="card-body" id="forth-tab" data-tab='4' style="display:none">
                             <div class="row d-flex">
                                 <div class="col-sm-5">
                                     <div id="monthinfo" style="margin-bottom: 5px;">
@@ -438,6 +555,8 @@
         <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
         <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <script type='text/javascript'>
             var oTable, editId;
@@ -446,6 +565,20 @@
             var calyear = 0;
             var geocoder;
             var map;
+            var taskDateTime;
+            var taskDetailArray;
+            var timeArray = [
+                "09:00 <span class='timeLabel'>AM</span>",
+                "10:00 <span class='timeLabel'>AM</span>",
+                "11:00 <span class='timeLabel'>AM</span>",
+                "12:00 <span class='timeLabel'>AM</span>",
+                "01:00 <span class='timeLabel'>PM</span>",
+                "02:00 <span class='timeLabel'>PM</span>",
+                "03:00 <span class='timeLabel'>PM</span>",
+                "04:00 <span class='timeLabel'>PM</span>",
+                "05:00 <span class='timeLabel'>PM</span>",
+                "06:00 <span class='timeLabel'>PM</span>"
+            ];
             var paramMonth = '<?php echo $_GET["month"] ?? "" ?>';
             // $(function() {
             //     $('.date-picker').datepicker({
@@ -489,6 +622,7 @@
                     Global.GetCommonValue($year);
                 });
                 default_year_results();
+                $("#myModal .modal-dialog").css("max-width", Math.round($(window).width() / 1.1));
             })
 
             function printView() {
@@ -616,64 +750,131 @@
                     `);
                 });
             }
+            DesignTimeTable();
+
+            function DesignTimeTable() {
+                $(".timeTable").append(
+                    $("<tbody>").append(
+                        $("<tr>").append(
+                            $("<td>").html(timeArray[0]),
+                            $("<td>").html(timeArray[1])
+                        ),
+                        $("<tr>").append(
+                            $("<td>").html(timeArray[2]),
+                            $("<td>").html(timeArray[3])
+                        ),
+                        $("<tr>").append(
+                            $("<td>").html(timeArray[4]),
+                            $("<td>").html(timeArray[5])
+                        ),
+                        $("<tr>").append(
+                            $("<td>").html(timeArray[6]),
+                            $("<td>").html(timeArray[7])
+                        ),
+                        $("<tr>").append(
+                            $("<td>").html(timeArray[8]),
+                            $("<td>").html(timeArray[9])
+                        )
+                    )
+                );
+
+                $(".timeTable tbody>tr>td").click(function() {
+                    $(this).hasClass("tdActive") ? $(this).removeClass("tdActive") : $(this).addClass("tdActive");
+                    SetTimeLabel();
+                });
+            }
+
+            function SetTimeLabel() {
+                var txt = "";
+                $("#lblTime").html("");
+                $(".timeTable tbody>tr>td").each(function() {
+                    if ($(this).hasClass('tdActive')) {
+                        txt += $(this).text() + "<br/>";
+                    }
+                })
+                $("#lblTime").html(txt);
+            }
 
             function FirstTab() {
                 $("#appliance_list,#appliance_list_view").empty();
-                $("#btnskip").show();
-                $("#btnprev").hide();
-                $("#btnprint").hide();
-                $("#btnnext").show();
-                $("#btnsave").hide();
-                $("#first-tab").show();
-                $("#second-tab").hide();
-                $("#third-tab").hide();
+                $(".activeTab").removeClass("activeTab").addClass("disableTab");
+                $("#second-tab").addClass("activeTab").removeClass("disableTab");
+
+                $("#dvDatePicker").datepicker({
+                    autoclose: true,
+                    setDate: new Date(),
+                    todayHighlight: true,
+                    daysOfWeekDisabled: [0]
+                }).on("changeDate   ", function() {
+                    SetDateLabel($(this).datepicker("getDate"));
+                    SetTasks();
+                    // CheckBookingSlot();
+                });
+                //$(".timeTable tbody>tr>td:eq(0)").click();
+                SetDateLabel(new Date());
+                $("#userNote").val("");
+                Prev();
+            }
+
+            function CheckBookingSlot() {
+                if (taskDetailArray.length > 0) {
+
+                }
+            }
+
+            function SetDateLabel(dateVal) {
+                let selectedDate = new Date(dateVal);
+                let monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                let dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satuarday", "Sunday"];
+
+                $("#lblDate").text(selectedDate.getDate())
+                $("#lblDay").text(dayNames[selectedDate.getDay() - 1].toUpperCase());
+                $("#lblMonth").text(monthNames[selectedDate.getMonth()].toUpperCase());
+                taskDateTime = selectedDate.getFullYear() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getDate();
             }
 
             function Next() {
+                var obj = $(".activeTab", "#myModal");
+                $(".activeTab").removeClass("activeTab").addClass("disableTab");
+                $(obj).next(".card-body").addClass("activeTab").removeClass("disableTab");
+                var tabIdx = $(".activeTab").data('tab');
+                ShowHideTab(tabIdx);
+            }
+
+            function Prev() {
+                var obj = $(".activeTab", "#myModal");
+                $(".activeTab").removeClass("activeTab").addClass("disableTab");
+                $(obj).prev(".card-body").addClass("activeTab").removeClass("disableTab");
+                var tabIdx = $(".activeTab").data('tab');
+                ShowHideTab(tabIdx);
+            }
+
+            function ShowHideTab(tabIdx) {
                 $("#btnprint").hide();
                 $("#btnskip").hide();
                 $("#btnnext").hide();
                 $("#btnprev").hide();
                 $("#btnsave").hide();
-                $("#first-tab").hide();
-                $("#third-tab").hide();
-                if ($("#second-tab").is(":visible")) {
-                    $("#second-tab").hide();
-                    $("#btnsave").show();
+                if (tabIdx == '1') {
+                    $("#btnnext").show();
+                    $("#btnskip").show();
+                } else if (tabIdx == "4") {
                     $("#btnprint").show();
                     $("#btnprev").show();
-                    $("#third-tab").show();
-                    setTimeout(() => {
-                        ShowConfirmTab();
-                    }, 500);
+                    $("#btnsave").show();
                 } else {
                     $("#btnnext").show();
                     $("#btnprev").show();
-                    $("#second-tab").show();
                 }
-            }
-
-            function Prev() {
-                $("#btnprint").hide();
-                $("#btnnext").hide();
-                $("#btnprev").hide();
-                $("#btnsave").hide();
-                $("#first-tab").hide();
-                $("#third-tab").hide();
-                if ($("#second-tab").is(":visible")) {
-                    $("#btnskip").show();
-                    $("#second-tab").hide();
-                    $("#first-tab").show();
-                    $("#btnnext").show();
-                } else {
-                    $("#btnprev").show();
-                    $("#btnnext").show();
-                    $("#second-tab").show();
-                }
+                $('.selectedTabLabel').removeClass('selectedTabLabel');
+                $("#label_" + tabIdx).addClass('selectedTabLabel');
             }
 
             function skip() {
-                $("#second-tab").show();
+                $(".activeTab").removeClass("activeTab").addClass("disableTab");
+                $("#third-tab").addClass("activeTab").removeClass("disableTab");
                 Next();
             }
 
@@ -748,6 +949,7 @@
                         "processing": true,
                         "serverSide": true,
                         "datetype": "json",
+                        'method': "POST",
                         "iDisplayLength": 100,
                         "bFilter": false,
                         "data": {
@@ -766,11 +968,12 @@
                             title: "",
                             data: "Id",
                             render: (data, display, alldata) => {
+                                var booked = alldata.taskId != null ? "<em class='fa fa-circle' style='color:#d95858'></em>" : "";
                                 return `
-                    <button class ='btndelete actionbtn btn btn-sm' data-id='${data}'><i class='fa fa-trash'></i>&nbsp;Delete</button>
-                    <button class ='btnedit actionbtn btn btn-sm' data-id='${data}'><i class='fa fa-edit'></i>&nbsp;Edit</button>
+                    <button class ='btndelete actionbtn btn btn-sm' data-id='${data}' ><i class='fa fa-trash'></i>&nbsp;Delete</button>
+                    <button class ='btnedit actionbtn btn btn-sm' data-id='${data}' ><i class='fa fa-edit'></i>&nbsp;Edit</button>
                     <button class ='btnview actionbtn btn btn-sm' data-id='${data}'><i class="fa fa-file-alt"></i>&nbsp;View</button>
-                    `;
+                    ` + booked;
                             }
                         },
 
@@ -856,6 +1059,13 @@
                 } else {
                     $blacklist_customer = 'No';
                 }
+                var taskTime = [];
+                $(".timeTable tbody>tr>td").each(function() {
+                    if ($(this).hasClass('tdActive')) {
+                        taskTime.push($(this).text());
+                    }
+                })
+
                 $.ajax({
                     url: 'api/address_action.php',
                     type: "post",
@@ -868,7 +1078,10 @@
                         'postcode': $('#postcode').val(),
                         'month': $('#month').val(),
                         'blacklist': $blacklist_customer,
-                        'appliance': appliance
+                        'appliance': appliance,
+                        'note': $("#userNote").val(),
+                        'taskDate': taskDateTime,
+                        'taskTime': taskTime.join(',')
                     },
                     success: function(response) {
                         if (response == 'Record udpated successfully') {
@@ -887,6 +1100,92 @@
                 });
             }
 
+            function SetTasks() {
+                $("#bookingTable tbody").empty();
+                $(timeArray).each(function(i, val) {
+                    $("#bookingTable tbody").append(
+                        $("<tr>").append(
+                            $("<td>").html(val).addClass('timeTab').attr("nowrap", "nowrap").css("width", "80px"),
+                            $("<td>").html("").css("font-size", "14px"),
+                        ).css("cursor", "pointer").attr("onclick", "setExistingBooking(this)")
+                    );
+                })
+                if (taskDetailArray.length <= 0) return;
+                if (taskDateTime != undefined && taskDateTime != null) {
+                    var slDate = taskDateTime;
+                    var idx = 0;
+                    $(taskDetailArray).each(function(i, val) {
+                        var note = "";
+                        $(this).data("note", note);
+                        $("#bookingTable tbody tr").each(function() {
+                            var time = $("td:eq(0)", this).text();
+
+                            if (val.taskTime != null) {
+                                if (val.taskDate == slDate && val.taskTime.indexOf(time) != -1) {
+                                    var tDate = new Date(val.taskDate);
+                                    var sDate = new Date();
+                                    var bkColor = tDate > sDate ? '#feffd7' : '#ffdcdc';
+                                    if (idx == 0) {
+                                        $("td:eq(1)", this).html(val.address + "<em style='float:right;color: red;' class='fa fa-trash' onclick='RemoveBooking(" + val.id + ",event)'></em>" + "<br/>" + "<b>Note:</b> " + val.note).css({
+                                            "background": bkColor,
+                                            "padding": "padding: 2px 10px 2px 10px;"
+                                        }).data("time", val.taskTime);
+                                    } else {
+                                        $("td:eq(1)", this).css({
+                                            "background": bkColor,
+                                            "padding": "padding: 2px 10px 2px 10px;"
+                                        });
+                                    }
+                                    note = val.note != "" && val.note != null ? btoa(val.note) : "";
+                                    $(this).data("note", note);
+                                    idx++;
+                                }
+                            }
+                        })
+                    });
+                }
+            }
+
+            function RemoveBooking(rowId, event) {
+                event.stopPropagation();
+                var alertMsg = confirm("Are you sure you want to remove booking?");
+
+                if (alertMsg == true) {
+                    $.ajax({
+                        url: 'api/address_action.php',
+                        datatype: 'json',
+                        type: "post",
+                        data: {
+                            "action": 'deleteBooking',
+                            'id': rowId
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            getAllTask();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            debugger
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+                }
+            }
+
+            function setExistingBooking(obj) {
+                var note = $(obj).data("note") != "" ? atob($(obj).data("note")) : "";
+                var time = $("td:eq(1)", obj).data("time");
+                $(".tdActive").removeClass("tdActive");
+                if (time != undefined && time != null) {
+                    $(".timeTable tbody>tr>td").each(function() {
+                        if (time.indexOf($(this).text()) != -1) {
+                            $(this).addClass("tdActive");
+                        }
+                    })
+                }
+                SetTimeLabel();
+                $("#userNote").val(note);
+            }
+
             function AfterDrawTable() {
                 var that = this;
                 $('.btnview').click(function() {
@@ -901,7 +1200,6 @@
                         },
                         success: function(response) {
                             $data = JSON.parse(response);
-                            console.log(response);
                             $('#blacklist').prop("checked", false);
                             $('#month').prop("disabled", false);
                             $('#month').val($data['month']);
@@ -937,7 +1235,6 @@
                             });
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            debugger
                             console.log(textStatus, errorThrown);
                         }
                     });
@@ -961,6 +1258,9 @@
 
                     $('#month').val(month);
                     let blacklist = $(this).closest('tr').find('.tdblacklist').text();
+
+                    let note = $(this).closest('tr').find(".tdnote").text();
+                    $('#userNote').val(note);
 
                     FirstTab();
                     skip();
@@ -980,7 +1280,6 @@
                         },
                         success: function(response) {
                             $data = JSON.parse(response);
-                            console.log(response);
                             $('#blacklist').prop("checked", false);
                             $('#month').prop("disabled", false);
                             $('#month').val($data['month']);
@@ -1020,7 +1319,29 @@
                             console.log(textStatus, errorThrown);
                         }
                     });
-
+                    getAllTask();
+                    //adding recommended task date in edit popup
+                    $("#dvRecommend").empty();
+                    $.ajax({
+                        url: 'api/address_action.php',
+                        datatype: 'json',
+                        type: "post",
+                        data: {
+                            "action": 'getRecommended',
+                            'street': $(this).closest('tr').find('.tdstreet').text()
+                        },
+                        success: function(response) {
+                            let recommend = JSON.parse(response);
+                            $(recommend).each(function(i, val) {
+                                $("#dvRecommend").append(
+                                    $("<label>").text(val.taskDate).addClass('recommendLabel')
+                                )
+                            })
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
                     FirstTab();
                     let houseno = $(this).closest('tr').find('.tdhouse_no').text();
                     $('#myModal').modal('show');
@@ -1041,6 +1362,8 @@
 
                     $('#month').val(month);
                     let blacklist = $(this).closest('tr').find('.tdblacklist').text();
+
+                    //$('#userNote').val(note);
                     $("#modal-title").text("Edit Your Address Details");
                 })
 
@@ -1069,10 +1392,30 @@
                         }
                     });
                 });
+                google.maps.event.trigger(map, 'resize');
             }
 
 
-
+            function getAllTask() {
+                //adding existing booked task  in edit popup
+                $.ajax({
+                    url: 'api/address_action.php',
+                    datatype: 'json',
+                    type: "post",
+                    data: {
+                        "action": 'getTask',
+                        'addressid': editId
+                    },
+                    success: function(response) {
+                        let res = JSON.parse(response);
+                        taskDetailArray = res;
+                        SetTasks();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+            }
 
             function default_year_results() {
                 $year = new Date().getFullYear();
