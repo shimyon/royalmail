@@ -656,6 +656,7 @@
             }
 
             function codeAddress() {
+                debugger
                 if ($("#blacklist").is(":checked")) {
                     $("#monthinfo").hide();
                 } else {
@@ -691,7 +692,7 @@
                         map.setOptions(mapOptions);
                         map.setPosition(astorPlace);
 
-
+                        debugger
                         google.maps.event.trigger(map, 'resize');
                     }
                 }, (err) => {
@@ -864,6 +865,7 @@
                     $("#btnprint").show();
                     $("#btnprev").show();
                     $("#btnsave").show();
+                    ShowConfirmTab();
                 } else {
                     $("#btnnext").show();
                     $("#btnprev").show();
