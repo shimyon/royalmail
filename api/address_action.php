@@ -153,8 +153,8 @@ if ($_POST['action'] == "edit") {
     }
     //formatting date
     $taskDate = date("Y-m-d H:i:s", strtotime($taskDate));
-
-    $sql = "INSERT INTO royalmail_taskdetail (addressId,taskDate,note,taskTime) VALUES ('" . $id . "','" . $taskDate . "','" . $note . "','" . $taskTime . "')";
+    $sql = "REPLACE INTO royalmail_taskdetail 
+    (addressId,taskDate,note,taskTime) VALUES ('" . $id . "','" . $taskDate . "','" . $note . "','" . $taskTime . "')";
     if (!$conn->query($sql) === TRUE) {
       echo "Error: " . $sql . "<br>" . $conn->error;
     }

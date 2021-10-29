@@ -809,6 +809,7 @@
                 }).on("changeDate   ", function() {
                     SetDateLabel($(this).datepicker("getDate"));
                     SetTasks();
+                    RefreshDatatable($month_no, $year);
                     // CheckBookingSlot();
                 });
                 //$(".timeTable tbody>tr>td:eq(0)").click();
@@ -837,6 +838,7 @@
             }
 
             function Next() {
+                getAllTask();
                 var obj = $(".activeTab", "#myModal");
                 $(".activeTab").removeClass("activeTab").addClass("disableTab");
                 $(obj).next(".card-body").addClass("activeTab").removeClass("disableTab");
@@ -845,6 +847,7 @@
             }
 
             function Prev() {
+                getAllTask();
                 var obj = $(".activeTab", "#myModal");
                 $(".activeTab").removeClass("activeTab").addClass("disableTab");
                 $(obj).prev(".card-body").addClass("activeTab").removeClass("disableTab");
@@ -853,6 +856,7 @@
             }
 
             function ShowHideTab(tabIdx) {
+                getAllTask();
                 $("#btnprint").hide();
                 $("#btnskip").hide();
                 $("#btnnext").hide();
@@ -875,6 +879,7 @@
             }
 
             function skip() {
+                getAllTask();
                 $(".activeTab").removeClass("activeTab").addClass("disableTab");
                 $("#third-tab").addClass("activeTab").removeClass("disableTab");
                 Next();
