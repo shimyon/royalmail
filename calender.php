@@ -136,7 +136,12 @@
             if (taskDetailArray.length <= 0) return;
             var nDate = $("#dvDatePicker").datepicker('getDate');
             nDate = nDate == null ? new Date() : nDate;
-            var taskDateTime = nDate.getFullYear() + "-" + (nDate.getMonth() + 1) + "-" + nDate.getDate();
+            let month = (nDate.getMonth() + 1);
+            month = month < 10 ? "0" + month : month;
+
+            let dateNum = nDate.getDate();
+            dateNum = dateNum < 10 ? "0" + dateNum : dateNum;
+            var taskDateTime = nDate.getFullYear() + "-" + month + "-" + dateNum;
 
             if (taskDateTime != undefined && taskDateTime != null) {
                 var slDate = taskDateTime;
@@ -152,17 +157,17 @@
                                 var tDate = new Date(val.taskDate);
                                 var sDate = new Date();
                                 var bkColor = tDate > sDate ? '#feffd7' : '#ffdcdc';
-                                if (idx == 0) {
+                                // if (idx == 0) {
                                     $("td:eq(1)", this).html(val.address + "<br/>" + "<b>Note:</b> " + val.note).css({
                                         "background": bkColor,
                                         "padding": "padding: 2px 10px 2px 10px;"
                                     });
-                                } else {
-                                    $("td:eq(1)", this).css({
-                                        "background": bkColor,
-                                        "padding": "padding: 2px 10px 2px 10px;"
-                                    });
-                                }
+                                // } else {
+                                //     $("td:eq(1)", this).css({
+                                //         "background": bkColor,
+                                //         "padding": "padding: 2px 10px 2px 10px;"
+                                //     });
+                                // }
                                 note = val.note != "" && val.note != null ? btoa(val.note) : "";
                                 $(this).data("note", note);
                                 idx++;

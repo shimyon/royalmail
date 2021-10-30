@@ -15,28 +15,28 @@
         .ui-datepicker-calendar {
             display: none;
         }
-
+        
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 25px;
         }
-
+        
         .switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-
+        
         .activeTab {
             display: block !important;
         }
-
+        
         .disableTab {
             display: none !important;
         }
-
+        
         .slider {
             position: absolute;
             cursor: pointer;
@@ -48,7 +48,7 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
+        
         .slider:before {
             position: absolute;
             content: "";
@@ -60,44 +60,43 @@
             -webkit-transition: .4s;
             transition: .4s;
         }
-
+        
         #blacklist:checked+.slider {
             background-color: #ea4f4f;
         }
-
+        
         .newcheckbox:checked+.slider {
             background-color: #218838;
         }
-
+        
         input:focus+.slider {
             box-shadow: 0 0 1px #2196F3;
         }
-
+        
         input:checked+.slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
             transform: translateX(26px);
         }
-
         /* Rounded sliders */
-
+        
         .slider.round {
             border-radius: 34px;
         }
-
+        
         .slider.round:before {
             border-radius: 50%;
         }
-
+        
         .months_list img {
             cursor: pointer;
         }
-
+        
         .months_list p {
             cursor: pointer;
             font-size: 22px;
         }
-
+        
         .progressLabel {
             margin: 0px;
             margin-left: 10px;
@@ -107,60 +106,58 @@
             border-radius: 15px;
             transition: all 0.5s ease;
         }
-
+        
         .selectedTabLabel {
             background-color: #2ccf2c;
             transition: all 0.5s ease;
         }
-
+        
         .timeLabel {
             font-size: 11px;
         }
-
+        
         #bookingTable,
         .timeTable {
             border-collapse: separate;
             border-spacing: 5px;
         }
-
+        
         .timeTab,
         .timeTable>tbody>tr>td {
-
             color: #2ccf2c;
             text-align: center;
             border: 1px solid #b7bebf;
             padding: 5px;
             cursor: pointer;
         }
-
+        
         .timeTable>tbody>tr>td:hover {
             background: #2ccf2c;
             color: white;
         }
-
+        
         .tdActive {
             background: #34af71 !important;
             color: white !important;
         }
-
+        
         .popupLabel {
             background: #3465af !IMPORTANT;
             color: white;
             padding: 2px 10px 2px 9px;
             border-radius: 0px 12px 12px 0px;
         }
-
+        
         .recommendLabel {
             margin-left: 20px;
             margin-bottom: 10px;
             color: gray;
         }
-
+        
         @media print {
             .print {
                 display: block;
             }
-
             .no-print {
                 display: none;
             }
@@ -396,8 +393,8 @@
 '>
                                             <div></div>
                                         </div>
-                                        <table class='timeTable'>
-                                        </table>
+                                        <div style="text-align: center;"><input type="checkbox" id="dayfull" /> Day Full</div>
+                                        <table class='timeTable'></table>
                                     </div>
                                     <div class="col-md-12" style='overflow:auto; padding: 0px; padding-top: 5px; border-top: 1px solid #c1c0c0;'>
                                         <label class='popupLabel' style='background:#2ccf2c'>Recommended</label>
@@ -556,7 +553,8 @@
         <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0&callback=initMap&v=weekly" async></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous"
+            referrerpolicy="no-referrer" />
 
         <script type='text/javascript'>
             var oTable, editId;
@@ -656,7 +654,6 @@
             }
 
             function codeAddress() {
-                debugger
                 if ($("#blacklist").is(":checked")) {
                     $("#monthinfo").hide();
                 } else {
@@ -677,44 +674,43 @@
 
 
                 $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
-                    let results = data.results;
-                    if (results.length > 0) {
-                        let loc = results[0].geometry.location;
-                        let astorPlace = {
-                            lat: loc.lat,
-                            lng: loc.lng
-                        };
-                        var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
-                        var mapOptions = {
-                            zoom: 1,
-                            center: latlng
-                        };
-                        map.setOptions(mapOptions);
-                        map.setPosition(astorPlace);
+                        let results = data.results;
+                        if (results.length > 0) {
+                            let loc = results[0].geometry.location;
+                            let astorPlace = {
+                                lat: loc.lat,
+                                lng: loc.lng
+                            };
+                            var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                            var mapOptions = {
+                                zoom: 1,
+                                center: latlng
+                            };
+                            map.setOptions(mapOptions);
+                            map.setPosition(astorPlace);
 
-                        debugger
-                        google.maps.event.trigger(map, 'resize');
-                    }
-                }, (err) => {
-                    alert(err);
-                })
-                // geocoder.geocode({
-                //     'address': googleAddress
-                // }, function(results, status) {
-                //     if (status === 'OK') {
-                //         if (results.length > 0) {
-                //             let loc = results[0].geometry.location;
-                //             let astorPlace = {
-                //                 lat: loc.lat(),
-                //                 lng: loc.lng()
-                //             };
-                //             var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
-                //             var mapOptions = {
-                //                 zoom: 1,
-                //                 center: latlng
-                //             };
-                //             map.setOptions(mapOptions);
-                //             map.setPosition(astorPlace);
+                            google.maps.event.trigger(map, 'resize');
+                        }
+                    }, (err) => {
+                        alert(err);
+                    })
+                    // geocoder.geocode({
+                    //     'address': googleAddress
+                    // }, function(results, status) {
+                    //     if (status === 'OK') {
+                    //         if (results.length > 0) {
+                    //             let loc = results[0].geometry.location;
+                    //             let astorPlace = {
+                    //                 lat: loc.lat(),
+                    //                 lng: loc.lng()
+                    //             };
+                    //             var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                    //             var mapOptions = {
+                    //                 zoom: 1,
+                    //                 center: latlng
+                    //             };
+                    //             map.setOptions(mapOptions);
+                    //             map.setPosition(astorPlace);
 
 
                 //             google.maps.event.trigger(map, 'resize');
@@ -754,6 +750,8 @@
             DesignTimeTable();
 
             function DesignTimeTable() {
+                $("#lblTime").html("");
+                $(".timeTable").empty();
                 $(".timeTable").append(
                     $("<tbody>").append(
                         $("<tr>").append(
@@ -780,6 +778,10 @@
                 );
 
                 $(".timeTable tbody>tr>td").click(function() {
+                    if ($("#dayfull").is(":checked")) {
+                        alert("No more booking allow!");
+                        return;
+                    }
                     $(this).hasClass("tdActive") ? $(this).removeClass("tdActive") : $(this).addClass("tdActive");
                     SetTimeLabel();
                 });
@@ -806,10 +808,12 @@
                     setDate: new Date(),
                     todayHighlight: true,
                     daysOfWeekDisabled: [0]
-                }).on("changeDate   ", function() {
+                }).on("changeDate", function() {
+                    $("#dayfull").prop("checked", false);
+                    $("#userNote").val('');
                     SetDateLabel($(this).datepicker("getDate"));
                     SetTasks();
-                    RefreshDatatable($month_no, $year);
+                    // RefreshDatatable($month_no, $year);
                     // CheckBookingSlot();
                 });
                 //$(".timeTable tbody>tr>td:eq(0)").click();
@@ -834,11 +838,16 @@
                 $("#lblDate").text(selectedDate.getDate())
                 $("#lblDay").text(dayNames[selectedDate.getDay() - 1].toUpperCase());
                 $("#lblMonth").text(monthNames[selectedDate.getMonth()].toUpperCase());
-                taskDateTime = selectedDate.getFullYear() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getDate();
+                let month = (selectedDate.getMonth() + 1);
+                month = month < 10 ? "0" + month : month;
+
+                let dateNum = selectedDate.getDate();
+                dateNum = dateNum < 10 ? "0" + dateNum : dateNum;
+
+                taskDateTime = selectedDate.getFullYear() + "-" + month + "-" + dateNum;
             }
 
             function Next() {
-                getAllTask();
                 var obj = $(".activeTab", "#myModal");
                 $(".activeTab").removeClass("activeTab").addClass("disableTab");
                 $(obj).next(".card-body").addClass("activeTab").removeClass("disableTab");
@@ -847,7 +856,6 @@
             }
 
             function Prev() {
-                getAllTask();
                 var obj = $(".activeTab", "#myModal");
                 $(".activeTab").removeClass("activeTab").addClass("disableTab");
                 $(obj).prev(".card-body").addClass("activeTab").removeClass("disableTab");
@@ -856,7 +864,6 @@
             }
 
             function ShowHideTab(tabIdx) {
-                getAllTask();
                 $("#btnprint").hide();
                 $("#btnskip").hide();
                 $("#btnnext").hide();
@@ -879,7 +886,6 @@
             }
 
             function skip() {
-                getAllTask();
                 $(".activeTab").removeClass("activeTab").addClass("disableTab");
                 $("#third-tab").addClass("activeTab").removeClass("disableTab");
                 Next();
@@ -1067,7 +1073,7 @@
                     $blacklist_customer = 'No';
                 }
                 var taskTime = [];
-                $(".timeTable tbody>tr>td").each(function() {
+                $(".timeTable .tdActive").each(function() {
                     if ($(this).hasClass('tdActive')) {
                         taskTime.push($(this).text());
                     }
@@ -1101,13 +1107,13 @@
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        debugger
                         console.log(textStatus, errorThrown);
                     }
                 });
             }
 
             function SetTasks() {
+                DesignTimeTable();
                 $("#bookingTable tbody").empty();
                 $(timeArray).each(function(i, val) {
                     $("#bookingTable tbody").append(
@@ -1129,6 +1135,11 @@
 
                             if (val.taskTime != null) {
                                 if (val.taskDate == slDate && val.taskTime.indexOf(time) != -1) {
+                                    $(".timeTable tr td").each(function() {
+                                        if ($(this).text() == time) {
+                                            $(this).click();
+                                        }
+                                    });
                                     var tDate = new Date(val.taskDate);
                                     var sDate = new Date();
                                     var bkColor = tDate > sDate ? '#feffd7' : '#ffdcdc';
@@ -1146,6 +1157,7 @@
                                     note = val.note != "" && val.note != null ? btoa(val.note) : "";
                                     $(this).data("note", note);
                                     idx++;
+                                    $("#userNote").val(val.note);
                                 }
                             }
                         })
@@ -1171,7 +1183,6 @@
                             getAllTask();
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            debugger
                             console.log(textStatus, errorThrown);
                         }
                     });
@@ -1216,7 +1227,6 @@
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            debugger
                             console.log(textStatus, errorThrown);
                         }
                     });
@@ -1296,7 +1306,6 @@
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            debugger
                             console.log(textStatus, errorThrown);
                         }
                     });
@@ -1322,7 +1331,6 @@
                             });
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            debugger
                             console.log(textStatus, errorThrown);
                         }
                     });
@@ -1394,7 +1402,6 @@
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            debugger
                             console.log(textStatus, errorThrown);
                         }
                     });
