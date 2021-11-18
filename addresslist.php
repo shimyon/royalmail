@@ -374,7 +374,7 @@
                         <!-- Third Tab -->
                         <div class="card-body" id="second-tab" data-tab='2' style="display:none">
                             <div class="row">
-                                <div class='col-md-2'>
+                                <div class='col-md-2' style='margin:auto';>
                                     <label class='popupLabel'>Appointment</label>
                                     <div class='row'>
                                         <div class='col-md-4'>
@@ -387,14 +387,14 @@
                                         <label id='lblTime' style='font-size: 25px;margin-left: 10px;color: #30b6d5;'></label>
                                     </div>
                                 </div>
-                                <div class="col-md-5" style='border-left: 1px solid lightgrey; border-right: 1px solid lightgrey;padding:0px;'>
+                                <div class="col-md-5" style='border-left: 1px solid lightgrey; border-right: 0px solid lightgrey;padding:0px; margin:auto;'>
                                     <div class="col-md-12" style='margin-bottom: 20px;margin-left: 15px;    padding-top: 30px;'>
                                         <div class="input-group date" data-provide="datepicker" id='dvDatePicker' style='width:50%;float:left;margin-right: 15px;
 '>
                                             <div></div>
                                         </div>
-                                        <div style="text-align: center;"><input type="checkbox" id="dayfull" /> Day Full</div>
-                                        <table class='timeTable'></table>
+                                        <div style="text-align: center; display:none;"><input type="checkbox" id="dayfull" /> Day Full</div>
+                                        <table class='timeTable' style='display:none;' ></table>
                                     </div>
                                     <div class="col-md-12" style='overflow:auto; padding: 0px; padding-top: 5px; border-top: 1px solid #c1c0c0;'>
                                         <label class='popupLabel' style='background:#2ccf2c'>Recommended</label>
@@ -403,7 +403,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-5" style='padding:0px;'>
+                                <div class="col-md-5" style='padding:0px; display:none;'>
                                     <label class='popupLabel' style='background:#2ccf2c'>Bookings</label>
                                     <div style='max-height:270px;overflow:auto;' class='col-md-12'>
                                         <table id='bookingTable' style="width:100%">
@@ -413,9 +413,9 @@
                                 </div>
                                 <div class="form-group col-sm-12" style='border-top:1px solid lightgrey'>
 
-                                    <label for="userNote">Note</label>
+                                    <label for="userNote">Information</label>
                                     <div class="col">
-                                        <input type="text" class="form-control" id="userNote" placeholder="Note">
+                                        <input type="text" class="form-control" id="userNote" placeholder="">
                                     </div>
                                 </div>
                             </div>
@@ -629,27 +629,27 @@
             }
 
             function initMap() {
-                var mapOptions = {
-                    center: new google.maps.LatLng(42.345573, -71.098326),
-                    zoom: 15,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-                map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                // var mapOptions = {
+                //     center: new google.maps.LatLng(42.345573, -71.098326),
+                //     zoom: 2,
+                //     mapTypeId: google.maps.MapTypeId.ROADMAP
+                // };
+                // map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-                // map = new google.maps.StreetViewPanorama(
-                //     document.getElementById("map"), {
-                //         position: {
-                //             lat: 42.345573,
-                //             lng: -71.098326
-                //         },
-                //         addressControlOptions: {
-                //             position: google.maps.ControlPosition.BOTTOM_CENTER,
-                //         },
-                //         linksControl: false,
-                //         panControl: false,
-                //         enableCloseButton: false,
-                //     }
-                // );
+                map = new google.maps.StreetViewPanorama(
+                    document.getElementById("map"), {
+                        position: {
+                            lat: 42.345573,
+                            lng: -71.098326
+                        },
+                        addressControlOptions: {
+                            position: google.maps.ControlPosition.BOTTOM_CENTER,
+                        },
+                        linksControl: false,
+                        panControl: false,
+                        enableCloseButton: false,
+                    }
+                );
                 geocoder = new google.maps.Geocoder();
             }
 
@@ -676,25 +676,18 @@
                 $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
                         let results = data.results;
                         if (results.length > 0) {
-                            // let loc = results[0].geometry.location;
-                            // let astorPlace = {
-                            //     lat: loc.lat,
-                            //     lng: loc.lng
-                            // };
-                            // var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
-                            // var mapOptions = {
-                            //     zoom: 1,
-                            //     center: latlng
-                            // };
-                            // map.setOptions(mapOptions);
-                            // map.setPosition(astorPlace);
-
-                            map.setCenter(results[0].geometry.location);
-                            // var marker = new google.maps.Marker({
-                            //     map: map,
-                            //     position: results[0].geometry.location
-                            // });
-
+                            let loc = results[0].geometry.location;
+                            let astorPlace = {
+                                lat: loc.lat,
+                                lng: loc.lng
+                            };
+                            var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                            var mapOptions = {
+                                zoom: 1,
+                                center: latlng
+                            };
+                            map.setOptions(mapOptions);
+                            map.setPosition(astorPlace);
 
                             google.maps.event.trigger(map, 'resize');
                         }
@@ -842,9 +835,8 @@
                 ];
                 let dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satuarday", "Sunday"];
 
-                $("#lblDate").text(selectedDate.getDate());
-                let dayname = dayNames[selectedDate.getDate() - 1];
-                $("#lblDay").text((dayname || '').toUpperCase());
+                $("#lblDate").text(selectedDate.getDate())
+                $("#lblDay").text(dayNames[selectedDate.getDay() - 1].toUpperCase());
                 $("#lblMonth").text(monthNames[selectedDate.getMonth()].toUpperCase());
                 let month = (selectedDate.getMonth() + 1);
                 month = month < 10 ? "0" + month : month;
