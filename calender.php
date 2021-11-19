@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <?php include('_headerlink.php') ?>
     <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.1apis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .datepicker,
         .table-condensed {
@@ -47,8 +48,7 @@
                     </div>
                     <div class='row'>
                         <div class='col-md-6'>
-                            <div class="input-group date" data-provide="datepicker" id='dvDatePicker' style='width:50%;float:left;margin-right: 15px;
-'>
+                            <div class="input-group date" data-provide="datepicker" id='dvDatePicker' style='width:50%;float:left;margin-right: 15px;'>
                                 <div>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script>
@@ -93,11 +93,23 @@
         ];
 
         $("#dvDatePicker").datepicker({
+            changeMonth: true,
+            changeYear: true,
             autoclose: true,
             setDate: new Date(),
             todayHighlight: true,
-            daysOfWeekDisabled: [0]
-        }).on("changeDate   ", function() {
+            daysOfWeekDisabled: [0],
+            beforeShowDay: function(date) {
+                var day = date.getDay();
+                return [day != 0,''];
+            },
+            onSelect: function() {
+                //SetDateLabel($(this).datepicker("getDate"));
+                SetTasks();
+                // CheckBookingSlot();
+            }
+        }).on("onSelect", function() {
+            debugger
             //SetDateLabel($(this).datepicker("getDate"));
             SetTasks();
             // CheckBookingSlot();

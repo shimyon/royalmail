@@ -629,27 +629,27 @@
             }
 
             function initMap() {
-                // var mapOptions = {
-                //     center: new google.maps.LatLng(42.345573, -71.098326),
-                //     zoom: 2,
-                //     mapTypeId: google.maps.MapTypeId.ROADMAP
-                // };
-                // map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                var mapOptions = {
+                    center: new google.maps.LatLng(42.345573, -71.098326),
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-                map = new google.maps.StreetViewPanorama(
-                    document.getElementById("map"), {
-                        position: {
-                            lat: 42.345573,
-                            lng: -71.098326
-                        },
-                        addressControlOptions: {
-                            position: google.maps.ControlPosition.BOTTOM_CENTER,
-                        },
-                        linksControl: false,
-                        panControl: false,
-                        enableCloseButton: false,
-                    }
-                );
+                // map = new google.maps.StreetViewPanorama(
+                //     document.getElementById("map"), {
+                //         position: {
+                //             lat: 42.345573,
+                //             lng: -71.098326
+                //         },
+                //         addressControlOptions: {
+                //             position: google.maps.ControlPosition.BOTTOM_CENTER,
+                //         },
+                //         linksControl: false,
+                //         panControl: false,
+                //         enableCloseButton: false,
+                //     }
+                // );
                 geocoder = new google.maps.Geocoder();
             }
 
@@ -676,18 +676,25 @@
                 $.getJSON(`https://maps.googleapis.com/maps/api/geocode/json?address=${googleAddress}&key=AIzaSyDKxKWPV6KC45B1KkII8ETKsNfdXZ0c8r0`, (data) => {
                         let results = data.results;
                         if (results.length > 0) {
-                            let loc = results[0].geometry.location;
-                            let astorPlace = {
-                                lat: loc.lat,
-                                lng: loc.lng
-                            };
-                            var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
-                            var mapOptions = {
-                                zoom: 1,
-                                center: latlng
-                            };
-                            map.setOptions(mapOptions);
-                            map.setPosition(astorPlace);
+                            // let loc = results[0].geometry.location;
+                            // let astorPlace = {
+                            //     lat: loc.lat,
+                            //     lng: loc.lng
+                            // };
+                            // var latlng = new google.maps.LatLng(astorPlace.lat, astorPlace.lng);
+                            // var mapOptions = {
+                            //     zoom: 1,
+                            //     center: latlng
+                            // };
+                            // map.setOptions(mapOptions);
+                            // map.setPosition(astorPlace);
+
+                            map.setCenter(results[0].geometry.location);
+                            // var marker = new google.maps.Marker({
+                            //     map: map,
+                            //     position: results[0].geometry.location
+                            // });
+
 
                             google.maps.event.trigger(map, 'resize');
                         }
@@ -835,8 +842,9 @@
                 ];
                 let dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satuarday", "Sunday"];
 
-                $("#lblDate").text(selectedDate.getDate())
-                $("#lblDay").text(dayNames[selectedDate.getDay() - 1].toUpperCase());
+                $("#lblDate").text(selectedDate.getDate());
+                let dayname = dayNames[selectedDate.getDate() - 1];
+                $("#lblDay").text((dayname || '').toUpperCase());
                 $("#lblMonth").text(monthNames[selectedDate.getMonth()].toUpperCase());
                 let month = (selectedDate.getMonth() + 1);
                 month = month < 10 ? "0" + month : month;
