@@ -10,10 +10,10 @@ $GLOBALS['ADDRESSNOW_API_KEY'] = "ZW95-FD53-EW82-PM81";
 $servername = "emoiss.in";
 $GLOBALS['servername'] = $servername;
 
-$username = "emoiss_user";
+$username = "ariscare_user";
 $GLOBALS['username'] = $username;
 
-$password = "emoiss_pass";
+$password = "ariscare_pass";
 $GLOBALS['password'] = $password;
 
 $dbname = "emoiss_wish";
