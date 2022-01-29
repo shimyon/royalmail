@@ -16,5 +16,5 @@ $GLOBALS['username'] = $username;
 $password = "ariscare_pass";
 $GLOBALS['password'] = $password;
 
-$dbname = "emoiss_wish";
+$dbname = "royal";
 $GLOBALS['dbname'] = $dbname;
